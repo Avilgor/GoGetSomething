@@ -228,6 +228,7 @@ GameObject:
   - component: {fileID: 835881439}
   - component: {fileID: 835881438}
   - component: {fileID: 835881437}
+  - component: {fileID: 835881441}
   m_Layer: 0
   m_Name: Patricio
   m_TagString: Untagged
@@ -345,6 +346,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &835881441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 835881436}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cbc83b3bd6aa83b43acbfbf5525d5423, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1433972895
 GameObject:
   m_ObjectHideFlags: 0
@@ -380,8 +393,8 @@ Camera:
   m_GameObject: {fileID: 1433972895}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_ClearFlags: 2
+  m_BackGroundColor: {r: 0.31132078, g: 0.31132078, b: 0.31132078, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
