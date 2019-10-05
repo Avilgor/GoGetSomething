@@ -4,26 +4,43 @@ using UnityEngine;
 
 public class IA : MonoBehaviour
 {
-    private bool onRange;
+    enum enemyStates
+    {
+        idle = 0,
+        move,
+        die,
+        attack
+    }
+
     public Transform target;
     public float velocity;
+    enemyStates currentState, newState;
 
     void Start()
     {
-        onRange = false;
+        currentState = enemyStates.idle;
     }
 
 
     void Update()
     {
-        if(onRange)
+        switch (currentState)
         {
-            Vector3 diff = target.position - transform.position;
-            diff.Normalize();
-            float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0f, 0f, rot_z - 90);
+            case enemyStates.idle:
+                break;
+            case enemyStates.move:
+                Vector3 diff = target.position - transform.position;
+                diff.Normalize();
+                float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
+                transform.rotation = Quaternion.Euler(0f, 0f, rot_z - 90);
 
-            transform.position = Vector3.MoveTowards(transform.position, target.position, velocity);
+                transform.position = Vector3.MoveTowards(transform.position, target.position, velocity);
+                break;
+            case enemyStates.die:
+                break;
+            case enemyStates.attack:
+                break;
+
         }
     }
 
@@ -31,7 +48,7 @@ public class IA : MonoBehaviour
     {
         if (col.gameObject.tag.Equals("Player"))
         {
-            onRange = true;
+            currentState = enemyStates.move;
         }        
     }
 
@@ -39,7 +56,7 @@ public class IA : MonoBehaviour
     {
         if (col.gameObject.tag.Equals("Player"))
         {
-            onRange = false;
+            currentState = enemyStates.idle;
         }
     }
 }
