@@ -29,11 +29,6 @@ public class CombatZone : Zone
     #endregion
 
     #region Other Functions
-    protected virtual void Completed()
-    {
-        EventManager.OnZoneCompleted(this);
-        User.SetZoneCompletedQueue(ID);
-    }
 
     protected virtual void Failed()
     {

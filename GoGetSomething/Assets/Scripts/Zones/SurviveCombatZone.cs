@@ -10,7 +10,6 @@ using UnityEngine;
 public class SurviveCombatZone : CombatZone
 {
     #region Fields
-
     [SerializeField] private int _time = 30;
     #endregion
 
@@ -28,6 +27,12 @@ public class SurviveCombatZone : CombatZone
         yield return Timing.WaitForSeconds(1.5f);
 
         ZoneReady();
+    }
+
+    public override void Completed()
+    {
+        base.Completed();
+        EventManager.OnKillAllEnemies();
     }
 
     #endregion

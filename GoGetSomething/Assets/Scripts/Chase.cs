@@ -26,8 +26,7 @@ public class Chase : MonoBehaviour
         }
         if ((transform.position - target.transform.position).magnitude < 1 && !stop)
         {
-            stop = true;
-            target.GetComponent<Navigate>().enabled = false;
+            //TODO Hit
         }
         agent.SetDestination(target.transform.position);
         Navigate.DebugDrawPath(agent.path.corners);

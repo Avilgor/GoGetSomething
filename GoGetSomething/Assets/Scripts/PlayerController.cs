@@ -27,7 +27,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Zone _currentZone;
 
-    public float Velocity => _velocity * Time.fixedDeltaTime;
+    public float Velocity => _velocity * Time.deltaTime;
 
     #endregion
 
@@ -43,9 +43,10 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         DebugControls();
+        CheckStates();
     }
 
-    private static void DebugControls()
+    private void DebugControls()
     {
 #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.R))
@@ -54,10 +55,51 @@ public class PlayerController : MonoBehaviour
         }
 #endif
     }
-
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         MovementUpdate();
+    }
+
+    private void LateUpdate()
+    {
+        transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+    }
+
+    private void OnEnable()
+    {
+        EventManager.ZoneEntered += ZoneEntered;
+        EventManager.ZoneReady += ZoneReady;
+    }
+
+    private void OnDisabled()
+    {
+        EventManager.ZoneEntered -= ZoneEntered;
+        EventManager.ZoneReady -= ZoneReady;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            gameObject.SetActive(false);
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        Debug.Log(col.gameObject.name + " : " + gameObject.name + " : " + Time.time);
+        if (col.CompareTag("SwitchZone"))
+        {
+            col.GetComponent<TriggerSwitchZone>().SwitchZoneTriggerEntered(_currentZone, this);
+        }
+    }
+
+    #endregion
+
+    #region Other Functions
+
+    private void CheckStates()
+    {
         if (_currentState != _newState)
         {
             switch (_newState)
@@ -95,39 +137,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnEnable()
-    {
-        EventManager.ZoneEntered += ZoneEntered;
-        EventManager.ZoneReady += ZoneReady;
-    }
-
-    private void OnDisabled()
-    {
-        EventManager.ZoneEntered -= ZoneEntered;
-        EventManager.ZoneReady -= ZoneReady;
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            gameObject.SetActive(false);
-        }
-    }
-
-    void OnTriggerEnter2D(Collider2D col)
-    {
-        Debug.Log(col.gameObject.name + " : " + gameObject.name + " : " + Time.time);
-        if (col.CompareTag("SwitchZone"))
-        {
-            col.GetComponent<TriggerSwitchZone>().SwitchZoneTriggerEntered(_currentZone, this);
-        }
-    }
-
-    #endregion
-
-    #region Other Functions
-
     public void ChangeZone(Zone zone)
     {
         _currentZone = zone;
@@ -135,7 +144,6 @@ public class PlayerController : MonoBehaviour
 
     private void ZoneReady()
     {
-        Debug.Log("?");
         AutomaticMovement(false);
     }
 

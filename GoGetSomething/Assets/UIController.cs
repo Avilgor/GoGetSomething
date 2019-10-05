@@ -52,17 +52,26 @@ public class UIController : MonoBehaviour
 
     private void OnEnable()
     {
+        EventManager.ZoneEntered += ZoneEntered;
         EventManager.StartSurvivalTiming += StartSurvivalTiming;
     }
 
     private void OnDisable()
     {
+        EventManager.ZoneEntered -= ZoneEntered;
         EventManager.StartSurvivalTiming -= StartSurvivalTiming;
     }
 
     #endregion
 
     #region Other Functions
+
+    private Zone _currentZone;
+
+    private void ZoneEntered(Zone zone)
+    {
+        _currentZone = zone;
+    }
 
     private void StartSurvivalTiming(int value)
     {
@@ -101,6 +110,8 @@ public class UIController : MonoBehaviour
         _count = false;
         Timing.KillCoroutines("_Count");
         _timingCg.DOFade(0, 0.35f).SetDelay(1).SetEase(Ease.InOutSine);
+
+        _currentZone.Completed();
     }
 
     #endregion
