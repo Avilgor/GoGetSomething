@@ -24,13 +24,16 @@ public class EventManager : MonoBehaviour
     public static void OnExampleEvent() { ExampleEvent?.Invoke(); }
 
     #region Zones
-    public static event VoidDelegate SaveProcess, CleanPlayer;
+    public static event VoidDelegate SaveProcess, CleanPlayer, ZoneReady;
     public static event ZoneDelegate ZoneEntered, ZoneCompleted, ZoneExit;
+    public static event IntDelegate StartSurvivalTiming;
 
+    public static void OnZoneReady() { ZoneReady?.Invoke(); }
     public static void OnCleanPlayer() { CleanPlayer?.Invoke(); }
     public static void OnSaveProcess() { SaveProcess?.Invoke(); }
 
     public static void OnZoneEntered(Zone zone) { ZoneEntered?.Invoke(zone); }
+    public static void OnStartSurvivalTiming(int time) { StartSurvivalTiming?.Invoke(time); }
     public static void OnZoneCompleted(Zone zone) { ZoneCompleted?.Invoke(zone); }
     public static void OnZoneExit(Zone zone) { ZoneExit?.Invoke(zone); }
 

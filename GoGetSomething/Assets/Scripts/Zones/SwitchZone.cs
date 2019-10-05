@@ -13,6 +13,7 @@ public class SwitchZone : MonoBehaviour
 
     [SerializeField] private bool _isHorizontal;
     [SerializeField] private Transform _redTrigger, _blueTrigger;
+    [SerializeField] private BoxCollider2D _redCollision, _blueCollision;
 
     private bool _switching;
 
@@ -36,6 +37,22 @@ public class SwitchZone : MonoBehaviour
         else pos += Vector2.up * (isRed ? -_distanceToMove : _distanceToMove);
 
         return pos;
+    }
+
+    public void Close()
+    {
+        Debug.Log("Close Switches");
+
+        _redCollision.enabled = true;
+        _blueCollision.enabled = true;
+    }
+
+    public void Open()
+    {
+        Debug.Log("Open Switches");
+
+        _redCollision.enabled = false;
+        _blueCollision.enabled = false;
     }
 
     #endregion

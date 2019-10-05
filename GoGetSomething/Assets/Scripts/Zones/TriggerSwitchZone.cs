@@ -23,11 +23,14 @@ public class TriggerSwitchZone : MonoBehaviour
 
     public void SwitchZoneTriggerEntered(Zone currentZone, PlayerController player)
     {
+        Debug.Log("Switch Current Zone ["+currentZone.ID+"] to ["+_toZone.ID+"]");
+
         if (_toZone == currentZone) return;
         
-        currentZone.HideZone();
-        _toZone.ShowZone();
+        if(currentZone.ID != null) currentZone.Exit();
+        _toZone.Enter();
 
+        player.ChangeZone(_toZone);
         _switch.Switch(player, _isRed);
     }
     #endregion

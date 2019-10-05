@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using DG.Tweening;
+using MEC;
+using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public enum ZoneType
 {
@@ -11,24 +15,87 @@ public class Zone : MonoBehaviour
 {
     [SerializeField] protected ZoneType ZoneType = ZoneType.Null;
     [SerializeField] protected int IID;
+    [SerializeField] private Tilemap[] _tilemapsToShowHide;
+    [SerializeField] private SwitchZone[] _switches;
 
     public virtual string ID => ZoneType + "-" + IID;
 
-    protected virtual void Entered()
+    public void EnterInitZone()
     {
-        EventManager.OnZoneEntered(this);
+        OpenSwitches();
+        ShowZone();
     }
 
-    protected virtual void Exit()
+    protected virtual void Start()
+    {
+        HideZone();
+    }
+
+    public virtual void Enter()
+    {
+        EventManager.OnZoneEntered(this);
+        if (ZoneType == ZoneType.Combat) CloseSwitches();
+        ShowZone();
+
+        Timing.RunCoroutine(_PrepareZone());
+    }
+
+    public virtual void Exit()
     {
         EventManager.OnZoneExit(this);
+        HideZone();
     }
 
     public void ShowZone()
     {
+        Fade(1);
     }
 
     public void HideZone()
     {
+        Fade(0);
+    }
+
+    private void CloseSwitches()
+    {
+        for (int i = 0; i < _switches.Length; i++) _switches[i].Close();
+    }
+
+    private void OpenSwitches()
+    {
+        for (int i = 0; i < _switches.Length; i++) _switches[i].Open();
+    }
+
+    private void Fade(float alpha)
+    {
+        Debug.Log("Fade - "+ID + "- alpha: "+ alpha);
+
+        for (int i = 0; i < _tilemapsToShowHide.Length; i++)
+        {
+            var i1 = i;
+            var a = _tilemapsToShowHide[i1].color.a;
+            var c = _tilemapsToShowHide[i1].color;
+
+            DOTween.To(() => a, v => a = v, alpha, 0.35f).OnUpdate(()=> SetColor(a, _tilemapsToShowHide[i1]))
+                .SetEase(Ease.InOutSine).SetId("Color" + _tilemapsToShowHide[i1].GetInstanceID());
+        }
+    }
+
+    private void SetColor(float a, Tilemap tilemap)
+    {
+        tilemap.color = new Color(tilemap.color.r, tilemap.color.g, tilemap.color.b, a);
+    }
+
+    protected virtual IEnumerator<float> _PrepareZone()
+    {
+        yield return Timing.WaitForSeconds(2);
+
+        ZoneReady();
+    }
+
+    protected virtual void ZoneReady()
+    {
+        Debug.Log("??");
+        EventManager.OnZoneReady();
     }
 }

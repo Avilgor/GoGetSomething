@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -18,14 +19,15 @@ public class PlayerController : MonoBehaviour
         punch,
     }
 
-    [HideInInspector] public string CurrentZoneId;
-
     [SerializeField] private Rigidbody2D _rb;
+    [SerializeField] private BoxCollider2D _collider;
+    [SerializeField] private float _velocity = 0.08f;
     private PlayerState _currentState, _newState;
-    private float velocity;
     private bool _dontMove;
 
-    private Zone _currentZoneId;
+    [SerializeField] private Zone _currentZone;
+
+    public float Velocity => _velocity * Time.fixedDeltaTime;
 
     #endregion
 
@@ -33,12 +35,27 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        _currentZone.EnterInitZone();
         _currentState = PlayerState.idle;
-        velocity = 0.08f;
     }
 
 
-    void Update()
+    private void Update()
+    {
+        DebugControls();
+    }
+
+    private static void DebugControls()
+    {
+#if UNITY_EDITOR
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+#endif
+    }
+
+    void FixedUpdate()
     {
         MovementUpdate();
         if (_currentState != _newState)
@@ -52,24 +69,24 @@ public class PlayerController : MonoBehaviour
                     gameObject.SetActive(false);
                     break;
                 case PlayerState.walkUp:
-                    /*_rb.velocity += new Vector2(0, 0);
-                    if (_rb.velocity.y < 4)
-                        _rb.velocity = new Vector2(0, velocity);*/
+                    /*_rb._velocity += new Vector2(0, 0);
+                    if (_rb._velocity.y < 4)
+                        _rb._velocity = new Vector2(0, _velocity);*/
                     break;
                 case PlayerState.walkDown:
-                    /*_rb.velocity += new Vector2(0, 0);
-                    if (_rb.velocity.y > -4)
-                        _rb.velocity = new Vector2(0, -velocity);*/
+                    /*_rb._velocity += new Vector2(0, 0);
+                    if (_rb._velocity.y > -4)
+                        _rb._velocity = new Vector2(0, -_velocity);*/
                     break;
                 case PlayerState.walkLeft:
-                    /*_rb.velocity += new Vector2(0, 0);
-                    if (_rb.velocity.x > -4)
-                        _rb.velocity = new Vector2(-velocity, 0);*/
+                    /*_rb._velocity += new Vector2(0, 0);
+                    if (_rb._velocity.x > -4)
+                        _rb._velocity = new Vector2(-_velocity, 0);*/
                     break;
                 case PlayerState.walkRight:
-                    /*_rb.velocity = new Vector2(0, 0);
-                    if (_rb.velocity.x < 4)
-                        _rb.velocity += new Vector2(velocity, 0);*/
+                    /*_rb._velocity = new Vector2(0, 0);
+                    if (_rb._velocity.x < 4)
+                        _rb._velocity += new Vector2(_velocity, 0);*/
                     break;
                 case PlayerState.punch:
                     break;
@@ -78,16 +95,17 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnEnabled()
+    private void OnEnable()
     {
         EventManager.ZoneEntered += ZoneEntered;
+        EventManager.ZoneReady += ZoneReady;
     }
 
     private void OnDisabled()
     {
         EventManager.ZoneEntered -= ZoneEntered;
+        EventManager.ZoneReady -= ZoneReady;
     }
-
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -97,19 +115,54 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        Debug.Log(col.gameObject.name + " : " + gameObject.name + " : " + Time.time);
+        if (col.CompareTag("SwitchZone"))
+        {
+            col.GetComponent<TriggerSwitchZone>().SwitchZoneTriggerEntered(_currentZone, this);
+        }
+    }
+
     #endregion
 
     #region Other Functions
 
+    public void ChangeZone(Zone zone)
+    {
+        _currentZone = zone;
+    }
+
+    private void ZoneReady()
+    {
+        Debug.Log("?");
+        AutomaticMovement(false);
+    }
+
     public void MoveTo(Vector2 position, float time)
     {
-        _dontMove = true;
-        _rb.DOMove(position, 1).SetEase(Ease.OutSine).OnComplete(()=> _dontMove = false);
+        AutomaticMovement(true);
+        _rb.DOMove(position, 1).SetEase(Ease.OutSine);
+    }
+
+    private void AutomaticMovement(bool on)
+    {
+        if (on)
+        {
+            _dontMove = true;
+            _collider.enabled = false;
+        }
+        else
+        {
+            _dontMove = false;
+            _collider.enabled = true;
+        }
     }
 
     private void ZoneEntered(Zone id)
     {
-        _currentZoneId = id;
+        Debug.Log("Zone entered");
+        _currentZone = id;
     }
 
 
@@ -141,22 +194,22 @@ public class PlayerController : MonoBehaviour
             if (Input.GetKey(KeyCode.W))
             {
                 _newState = PlayerState.walkUp;
-                transform.position += new Vector3(0, velocity, 0);
+                transform.position += new Vector3(0, Velocity, 0);
             }
             if (Input.GetKey(KeyCode.S))
             {
                 _newState = PlayerState.walkDown;
-                transform.position += new Vector3(0, -velocity, 0);
+                transform.position += new Vector3(0, -Velocity, 0);
             }
             if (Input.GetKey(KeyCode.A))
             {
                 _newState = PlayerState.walkLeft;
-                transform.position += new Vector3(-velocity, 0, 0);
+                transform.position += new Vector3(-Velocity, 0, 0);
             }
             if (Input.GetKey(KeyCode.D))
             {
                 _newState = PlayerState.walkRight;
-                transform.position += new Vector3(velocity, 0, 0);
+                transform.position += new Vector3(Velocity, 0, 0);
             }
         }
     }

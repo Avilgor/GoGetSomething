@@ -23,13 +23,18 @@ public class SafeZone : Zone
         EventManager.SaveProcess -= SaveProcess;
     }
 
+    private void Reset()
+    {
+        ZoneType = ZoneType.Safe;
+    }
+
     #endregion
 
     #region Other Functions
 
-    protected override void Entered()
+    public override void Enter()
     {
-        base.Entered();
+        base.Enter();
 
         EventManager.OnCleanPlayer();
     }
