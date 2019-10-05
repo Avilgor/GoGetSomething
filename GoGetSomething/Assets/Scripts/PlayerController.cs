@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Movement : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     enum playerState
     {
@@ -112,4 +112,12 @@ public class Movement : MonoBehaviour
         }
     }
 
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag.Equals("Enemy"))
+        {
+            gameObject.SetActive(false);
+        }       
+    }
 }
