@@ -24,7 +24,7 @@ public class Movement : MonoBehaviour
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
         currentState = playerState.idle;
-        velocity = 4;
+        velocity = 0.08f;
     }
 
     
@@ -42,24 +42,24 @@ public class Movement : MonoBehaviour
                     gameObject.SetActive(false);
                     break;
                 case playerState.walkUp:
-                    rb.velocity = new Vector2(0, 0);
+                    /*rb.velocity += new Vector2(0, 0);
                     if (rb.velocity.y < 4)
-                        rb.velocity += new Vector2(0, velocity);
+                        rb.velocity = new Vector2(0, velocity);*/
                     break;
                 case playerState.walkDown:
-                    rb.velocity = new Vector2(0, 0);
+                    /*rb.velocity += new Vector2(0, 0);
                     if (rb.velocity.y > -4)
-                        rb.velocity += new Vector2(0, -velocity);
+                        rb.velocity = new Vector2(0, -velocity);*/
                     break;
                 case playerState.walkLeft:
-                    rb.velocity = new Vector2(0, 0);
+                    /*rb.velocity += new Vector2(0, 0);
                     if (rb.velocity.x > -4)
-                        rb.velocity += new Vector2(-velocity, 0);
+                        rb.velocity = new Vector2(-velocity, 0);*/
                     break;
                 case playerState.walkRight:
-                    rb.velocity = new Vector2(0, 0);
+                    /*rb.velocity = new Vector2(0, 0);
                     if (rb.velocity.x < 4)
-                        rb.velocity += new Vector2(velocity, 0);
+                        rb.velocity += new Vector2(velocity, 0);*/
                     break;
                 case playerState.punch:
                     break;
@@ -70,13 +70,45 @@ public class Movement : MonoBehaviour
 
     private void inputRead()
     {
+        
         if (!Input.anyKey) { newState = playerState.idle; }
         else
         {
-            if (Input.GetKeyDown(KeyCode.W)) { newState = playerState.walkUp; }
-            if (Input.GetKeyDown(KeyCode.S)) { newState = playerState.walkDown; }
-            if (Input.GetKeyDown(KeyCode.A)) { newState = playerState.walkLeft; }
-            if (Input.GetKeyDown(KeyCode.D)) { newState = playerState.walkRight; }
+           /* switch (Input.inputString)
+            {
+                case "w":
+                    newState = playerState.walkUp;
+                    break;
+                case "s":
+                    newState = playerState.walkDown;
+                    break;
+                case "a":
+                    newState = playerState.walkLeft;
+                    break;
+                case "d":
+                    newState = playerState.walkRight;
+                    break;
+            }*/
+            if (Input.GetKey(KeyCode.W))
+            {
+                newState = playerState.walkUp;
+                transform.position += new Vector3(0, velocity, 0);
+            }
+            if (Input.GetKey(KeyCode.S))
+            {
+                newState = playerState.walkDown;
+                transform.position += new Vector3(0, -velocity, 0);
+            }
+            if (Input.GetKey(KeyCode.A))
+            {
+                newState = playerState.walkLeft;
+                transform.position += new Vector3(-velocity, 0, 0);
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                newState = playerState.walkRight;
+                transform.position += new Vector3(velocity,0,0);
+            }
         }
     }
 
