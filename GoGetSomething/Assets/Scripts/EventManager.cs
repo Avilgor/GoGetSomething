@@ -15,13 +15,26 @@ public class EventManager : MonoBehaviour
     public delegate void BoolDelegate(bool value);
     public delegate void StringDelegate(string value);
 
-   
+    public delegate void ZoneDelegate(Zone zone);
+
     #endregion
 
     #region Events
     public static event VoidDelegate ExampleEvent;
     public static void OnExampleEvent() { ExampleEvent?.Invoke(); }
 
+    #region Zones
+    public static event VoidDelegate SaveProcess, CleanPlayer;
+    public static event ZoneDelegate ZoneEntered, ZoneCompleted, ZoneExit;
+
+    public static void OnCleanPlayer() { CleanPlayer?.Invoke(); }
+    public static void OnSaveProcess() { SaveProcess?.Invoke(); }
+
+    public static void OnZoneEntered(Zone zone) { ZoneEntered?.Invoke(zone); }
+    public static void OnZoneCompleted(Zone zone) { ZoneCompleted?.Invoke(zone); }
+    public static void OnZoneExit(Zone zone) { ZoneExit?.Invoke(zone); }
+
+    #endregion
     #endregion
 }
 

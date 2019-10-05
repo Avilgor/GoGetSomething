@@ -1,10 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    enum playerState
+    #region Fields
+
+    enum PlayerState
     {
         idle = 0,
         death,
@@ -13,111 +16,150 @@ public class PlayerController : MonoBehaviour
         walkUp,
         walkDown,
         punch,
-
     }
 
-    Rigidbody2D rb;
-    playerState currentState,newState;
+    [HideInInspector] public string CurrentZoneId;
+
+    [SerializeField] private Rigidbody2D _rb;
+    private PlayerState _currentState, _newState;
     private float velocity;
+    private bool _dontMove;
+
+    private Zone _currentZoneId;
+
+    #endregion
+
+    #region MonoBehaviour Functions
 
     void Start()
     {
-        rb = gameObject.GetComponent<Rigidbody2D>();
-        currentState = playerState.idle;
+        _currentState = PlayerState.idle;
         velocity = 0.08f;
     }
 
-    
+
     void Update()
     {
-        inputRead();
-        if (currentState != newState)
+        MovementUpdate();
+        if (_currentState != _newState)
         {
-            switch (newState)
+            switch (_newState)
             {
-                case playerState.idle:
-                    rb.velocity = new Vector2(0, 0);
+                case PlayerState.idle:
+                    _rb.velocity = new Vector2(0, 0);
                     break;
-                case playerState.death:
+                case PlayerState.death:
                     gameObject.SetActive(false);
                     break;
-                case playerState.walkUp:
-                    /*rb.velocity += new Vector2(0, 0);
-                    if (rb.velocity.y < 4)
-                        rb.velocity = new Vector2(0, velocity);*/
+                case PlayerState.walkUp:
+                    /*_rb.velocity += new Vector2(0, 0);
+                    if (_rb.velocity.y < 4)
+                        _rb.velocity = new Vector2(0, velocity);*/
                     break;
-                case playerState.walkDown:
-                    /*rb.velocity += new Vector2(0, 0);
-                    if (rb.velocity.y > -4)
-                        rb.velocity = new Vector2(0, -velocity);*/
+                case PlayerState.walkDown:
+                    /*_rb.velocity += new Vector2(0, 0);
+                    if (_rb.velocity.y > -4)
+                        _rb.velocity = new Vector2(0, -velocity);*/
                     break;
-                case playerState.walkLeft:
-                    /*rb.velocity += new Vector2(0, 0);
-                    if (rb.velocity.x > -4)
-                        rb.velocity = new Vector2(-velocity, 0);*/
+                case PlayerState.walkLeft:
+                    /*_rb.velocity += new Vector2(0, 0);
+                    if (_rb.velocity.x > -4)
+                        _rb.velocity = new Vector2(-velocity, 0);*/
                     break;
-                case playerState.walkRight:
-                    /*rb.velocity = new Vector2(0, 0);
-                    if (rb.velocity.x < 4)
-                        rb.velocity += new Vector2(velocity, 0);*/
+                case PlayerState.walkRight:
+                    /*_rb.velocity = new Vector2(0, 0);
+                    if (_rb.velocity.x < 4)
+                        _rb.velocity += new Vector2(velocity, 0);*/
                     break;
-                case playerState.punch:
+                case PlayerState.punch:
                     break;
             }
-            currentState = newState;
+            _currentState = _newState;
         }
     }
 
-    private void inputRead()
+    private void OnEnabled()
     {
-        
-        if (!Input.anyKey) { newState = playerState.idle; }
-        else
-        {
-           /* switch (Input.inputString)
-            {
-                case "w":
-                    newState = playerState.walkUp;
-                    break;
-                case "s":
-                    newState = playerState.walkDown;
-                    break;
-                case "a":
-                    newState = playerState.walkLeft;
-                    break;
-                case "d":
-                    newState = playerState.walkRight;
-                    break;
-            }*/
-            if (Input.GetKey(KeyCode.W))
-            {
-                newState = playerState.walkUp;
-                transform.position += new Vector3(0, velocity, 0);
-            }
-            if (Input.GetKey(KeyCode.S))
-            {
-                newState = playerState.walkDown;
-                transform.position += new Vector3(0, -velocity, 0);
-            }
-            if (Input.GetKey(KeyCode.A))
-            {
-                newState = playerState.walkLeft;
-                transform.position += new Vector3(-velocity, 0, 0);
-            }
-            if (Input.GetKey(KeyCode.D))
-            {
-                newState = playerState.walkRight;
-                transform.position += new Vector3(velocity,0,0);
-            }
-        }
+        EventManager.ZoneEntered += ZoneEntered;
+    }
+
+    private void OnDisabled()
+    {
+        EventManager.ZoneEntered -= ZoneEntered;
     }
 
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag.Equals("Enemy"))
+        if (collision.gameObject.CompareTag("Enemy"))
         {
             gameObject.SetActive(false);
-        }       
+        }
     }
+
+    #endregion
+
+    #region Other Functions
+
+    public void MoveTo(Vector2 position, float time)
+    {
+        _dontMove = true;
+        _rb.DOMove(position, 1).SetEase(Ease.OutSine).OnComplete(()=> _dontMove = false);
+    }
+
+    private void ZoneEntered(Zone id)
+    {
+        _currentZoneId = id;
+    }
+
+
+    private void MovementUpdate()
+    {
+        if (_dontMove) return;
+
+        if (!Input.anyKey)
+        {
+            _newState = PlayerState.idle;
+        }
+        else
+        {
+            /* switch (Input.inputString)
+             {
+                 case "w":
+                     _newState = PlayerState.walkUp;
+                     break;
+                 case "s":
+                     _newState = PlayerState.walkDown;
+                     break;
+                 case "a":
+                     _newState = PlayerState.walkLeft;
+                     break;
+                 case "d":
+                     _newState = PlayerState.walkRight;
+                     break;
+             }*/
+            if (Input.GetKey(KeyCode.W))
+            {
+                _newState = PlayerState.walkUp;
+                transform.position += new Vector3(0, velocity, 0);
+            }
+            if (Input.GetKey(KeyCode.S))
+            {
+                _newState = PlayerState.walkDown;
+                transform.position += new Vector3(0, -velocity, 0);
+            }
+            if (Input.GetKey(KeyCode.A))
+            {
+                _newState = PlayerState.walkLeft;
+                transform.position += new Vector3(-velocity, 0, 0);
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                _newState = PlayerState.walkRight;
+                transform.position += new Vector3(velocity, 0, 0);
+            }
+        }
+    }
+
+    #endregion
 }
