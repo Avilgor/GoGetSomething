@@ -15,6 +15,7 @@ public class Zone : MonoBehaviour
 {
     [SerializeField] protected ZoneType ZoneType = ZoneType.Null;
     [SerializeField] protected int IID;
+    [SerializeField] private bool _isInitZone;
     [SerializeField] private Tilemap[] _tilemapsToShowHide;
     [SerializeField] private SwitchZone[] _switches;
 
@@ -26,13 +27,14 @@ public class Zone : MonoBehaviour
         ShowZone();
     }
 
-    protected virtual void Start()
-    {
-        HideZone();
-    }
+//    protected virtual void Start()
+//    {
+//        if(!_isInitZone) HideZone();
+//    }
 
     public virtual void Enter()
     {
+        EventManager.OnCleanPlayer();
         EventManager.OnZoneEntered(this);
         if (ZoneType == ZoneType.Combat) CloseSwitches();
         ShowZone();
@@ -48,12 +50,12 @@ public class Zone : MonoBehaviour
 
     public void ShowZone()
     {
-        Fade(1);
+        //Fade(1);
     }
 
     public void HideZone()
     {
-        Fade(0);
+        //Fade(0);
     }
 
     private void CloseSwitches()
@@ -95,7 +97,14 @@ public class Zone : MonoBehaviour
 
     protected virtual void ZoneReady()
     {
-        Debug.Log("??");
         EventManager.OnZoneReady();
+    }
+
+    public virtual void Completed()
+    {
+        EventManager.OnZoneCompleted(this);
+        User.SetZoneCompletedQueue(ID);
+
+        OpenSwitches();
     }
 }

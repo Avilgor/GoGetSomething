@@ -23,6 +23,15 @@ public class EventManager : MonoBehaviour
     public static event VoidDelegate ExampleEvent;
     public static void OnExampleEvent() { ExampleEvent?.Invoke(); }
 
+    #region Enemies
+
+    public static event VoidDelegate KillAllEnemies;
+
+    public static void OnKillAllEnemies() { KillAllEnemies?.Invoke(); }
+
+
+    #endregion
+
     #region Zones
     public static event VoidDelegate SaveProcess, CleanPlayer, ZoneReady;
     public static event ZoneDelegate ZoneEntered, ZoneCompleted, ZoneExit;

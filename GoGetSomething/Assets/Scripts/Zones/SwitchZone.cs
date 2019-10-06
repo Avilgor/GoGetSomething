@@ -4,6 +4,7 @@
  */
 
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class SwitchZone : MonoBehaviour
 {
@@ -13,7 +14,8 @@ public class SwitchZone : MonoBehaviour
 
     [SerializeField] private bool _isHorizontal;
     [SerializeField] private Transform _redTrigger, _blueTrigger;
-    [SerializeField] private BoxCollider2D _redCollision, _blueCollision;
+    [SerializeField] private TilemapCollider2D _tilemapCollider;
+    [SerializeField] private TilemapRenderer _tilemapRenderer;
 
     private bool _switching;
 
@@ -21,6 +23,10 @@ public class SwitchZone : MonoBehaviour
 
     #region MonoBehaviour Functions
 
+    private void Start()
+    {
+        Open();
+    }
     #endregion
 
     #region Other Functions
@@ -43,16 +49,16 @@ public class SwitchZone : MonoBehaviour
     {
         Debug.Log("Close Switches");
 
-        _redCollision.enabled = true;
-        _blueCollision.enabled = true;
+        _tilemapCollider.enabled = true;
+        _tilemapRenderer.enabled = true;
     }
 
     public void Open()
     {
         Debug.Log("Open Switches");
 
-        _redCollision.enabled = false;
-        _blueCollision.enabled = false;
+        _tilemapCollider.enabled = false;
+        _tilemapRenderer.enabled = false;
     }
 
     #endregion

@@ -3,6 +3,8 @@
  * Created by Akeru on 05/10/2019
  */
 
+using System.Collections.Generic;
+using MEC;
 using UnityEngine;
 
 public class SafeZone : Zone
@@ -34,9 +36,6 @@ public class SafeZone : Zone
 
     public override void Enter()
     {
-        base.Enter();
-
-        EventManager.OnCleanPlayer();
     }
 
     //TODO Maybe this shouldn't be here
