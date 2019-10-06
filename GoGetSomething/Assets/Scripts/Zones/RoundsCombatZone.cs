@@ -3,13 +3,24 @@
  * Created by Akeru on 05/10/2019
  */
 
+using System;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class RoundsCombatZone : CombatZone
 {
     #region Fields
 
-    [SerializeField] private int _rounds = 3;
+    [Serializable]
+    public struct RoundData
+    {
+        public EnemySpawners[] Spawners;
+    }
+
+    [TabGroup("Rounds")] [SerializeField] private RoundData[] _rounds;
+
+    private int _roundCount;
+    private int _enemiesDied;
 
     #endregion
 
@@ -18,6 +29,42 @@ public class RoundsCombatZone : CombatZone
     #endregion
 
     #region Other Functions
+
+    protected override void SpawnEnemies()
+    {
+    }
+
+    protected override void ZoneReady()
+    {
+        base.ZoneReady();
+        StartRound();
+    }
+
+    private void StartRound()
+    {
+        var round = _rounds[_roundCount];
+        for (int i = 0; i < round.Spawners.Length; i++)
+        {
+            round.Spawners[i].Spawner.StartSpawn(this);
+        }
+    }
+
+    public override void EnemyKilled(Enemy enemy)
+    {
+        _enemiesDied++;
+        if (_enemiesDied >= _rounds[_roundCount].Spawners.Length)
+        {
+            _roundCount++;
+            if (_roundCount >= _rounds.Length - 1)
+            {
+                Completed();
+            }
+            else
+            {
+                StartRound();
+            }
+        }
+    }
 
     #endregion
 }

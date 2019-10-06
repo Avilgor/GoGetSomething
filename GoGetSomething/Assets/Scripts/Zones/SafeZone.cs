@@ -36,5 +36,10 @@ public class SafeZone : Zone
         _bonfire.ID = IID;
     }
 
+    public void SetName()
+    {
+        gameObject.name = "[" + ID + "] - Safe Zone";
+    }
+
     #endregion
 }

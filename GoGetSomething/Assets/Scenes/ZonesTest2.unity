@@ -2223,11 +2223,8 @@ MonoBehaviour:
   - {fileID: 1643461171}
   - {fileID: 1305020429}
   CombatType: 0
+  EnemySpawners: []
   _time: 1
-  _enemySpawners:
-  - Spawner: {fileID: 942449935}
-    SpawnTimeRate: {x: 1, y: 2}
-    PossibleEnemies: 64000000
 --- !u!1 &361064904
 GameObject:
   m_ObjectHideFlags: 0
@@ -10939,7 +10936,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 996720374}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.51, y: 9.46, z: 0}
+  m_LocalPosition: {x: -1.51, y: 9.46, z: -0.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -18550,6 +18547,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 677642087}
     m_Modifications:
+    - target: {fileID: 128411381625733499, guid: a4e03da91f6f21c4e976e8db4ecbe430,
+        type: 3}
+      propertyPath: _isHorizontal
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 128411381625733497, guid: a4e03da91f6f21c4e976e8db4ecbe430,
         type: 3}
       propertyPath: m_Name
@@ -18559,11 +18561,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 128411381625733499, guid: a4e03da91f6f21c4e976e8db4ecbe430,
-        type: 3}
-      propertyPath: _isHorizontal
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 128411381625733498, guid: a4e03da91f6f21c4e976e8db4ecbe430,
         type: 3}
@@ -30846,8 +30843,8 @@ MonoBehaviour:
   _switches:
   - {fileID: 276718496}
   CombatType: 0
+  EnemySpawners: []
   _time: 5
-  _enemySpawners: []
 --- !u!1 &1976976897
 GameObject:
   m_ObjectHideFlags: 0
@@ -35879,11 +35876,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 976703432}
     m_Modifications:
-    - target: {fileID: 6486765656028348245, guid: 66437cedcde3ce146a2e4800d192e795,
-        type: 3}
-      propertyPath: m_Name
-      value: Safe - MODEL
-      objectReference: {fileID: 0}
     - target: {fileID: 6486765656028348266, guid: 66437cedcde3ce146a2e4800d192e795,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -35938,6 +35930,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6486765656028348245, guid: 66437cedcde3ce146a2e4800d192e795,
+        type: 3}
+      propertyPath: m_Name
+      value: Safe - MODEL
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 66437cedcde3ce146a2e4800d192e795, type: 3}

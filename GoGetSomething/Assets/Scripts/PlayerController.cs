@@ -29,7 +29,7 @@ public class PlayerController : Singleton<PlayerController>
         WalkLeft,
         WalkUp,
         WalkDown,
-        BoneAttack,
+        Attack,
     }
 
     [Title("Setup")]
@@ -246,8 +246,8 @@ public class PlayerController : Singleton<PlayerController>
                             break;
                     }
                     break;
-                case PlayerState.BoneAttack:
-                    _anim.SetTrigger("boneAttack");
+                case PlayerState.Attack:
+                    _anim.SetTrigger("attack");
                     break;
             }
 
@@ -342,7 +342,7 @@ public class PlayerController : Singleton<PlayerController>
             }           
             if (Input.GetKey(KeyCode.Space))
             {
-                _newState = PlayerState.BoneAttack;
+                _newState = PlayerState.Attack;
                 _attacking = true;
             }
         }

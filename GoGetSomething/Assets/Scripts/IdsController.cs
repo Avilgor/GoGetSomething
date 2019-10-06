@@ -29,6 +29,7 @@ public class IdsController : MonoBehaviour
         {
             CombatZone.IID = ID;
             CombatZone.ZoneType = ZoneType.Combat;
+            CombatZone.SetName();
         }
     }
 
@@ -48,6 +49,7 @@ public class IdsController : MonoBehaviour
             SafeZone.IID = ID;
             SafeZone.ZoneType = ZoneType.Safe;
             SafeZone.SetBonfireId();
+            SafeZone.SetName();
         }
     }
 

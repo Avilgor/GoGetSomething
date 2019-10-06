@@ -6,7 +6,7 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-enum lookPoint
+enum LookPoint
 {
     upLeft=0,
     upRight,
@@ -28,9 +28,12 @@ public class Enemy : MonoBehaviour
     [SerializeField] private NavMeshAgent _agent;
     [SerializeField] private Animator _anim;
 
+    public bool _attacking;
     private bool _stop;
     private GameObject _target;
-    private lookPoint directionPointer;
+    private LookPoint directionPointer;
+
+    [HideInInspector] public CombatZone ParentCombatZone;
 
     #endregion
 
@@ -38,7 +41,8 @@ public class Enemy : MonoBehaviour
     private void Start()
     {
         InitSetup();
-        directionPointer = lookPoint.downRight;
+        directionPointer = LookPoint.downRight;
+        _attacking = false;
     }
 
     private void Update()
@@ -47,16 +51,16 @@ public class Enemy : MonoBehaviour
         directionPointer = CalculateAngleDirection();
         switch (directionPointer)
         {
-            case lookPoint.upLeft:
+            case LookPoint.upLeft:
                 _anim.SetFloat("Blend",1f);
                 break;
-            case lookPoint.upRight:
+            case LookPoint.upRight:
                 _anim.SetFloat("Blend",0.66f);
                 break;
-            case lookPoint.downRight:
+            case LookPoint.downRight:
                 _anim.SetFloat("Blend",0.33f);
                 break;
-            case lookPoint.downLeft:
+            case LookPoint.downLeft:
                 _anim.SetFloat("Blend",0f);
                 break;
         }
@@ -70,10 +74,7 @@ public class Enemy : MonoBehaviour
     {
         EventManager.KillAllEnemies -= Die;
     }
-    private void Die()
-    {
 
-    }
     #endregion
 
     #region Other Functions
@@ -91,22 +92,32 @@ public class Enemy : MonoBehaviour
         if ((transform.position - _target.transform.position).magnitude < 1 && !_stop)
         {
             Debug.Log("Enemy Attack");
-            //TODO Hit
+            _anim.SetBool("attack", true);
+            _attacking = true;
+        }
+        else { _anim.SetBool("attack", false); }
+        if (!_attacking)
+        {
+            _agent.SetDestination(_target.transform.position);
+            Navigate.DebugDrawPath(_agent.path.corners);
         }
 
-        _agent.SetDestination(_target.transform.position);
-        Navigate.DebugDrawPath(_agent.path.corners);        
     }
 
-    private lookPoint CalculateAngleDirection()
+    private LookPoint CalculateAngleDirection()
     {
-        Vector3 v2 = transform.position - _target.transform.position;
-        float angle = Mathf.Atan2(v2.y, v2.x) * Mathf.Rad2Deg;
-        if (angle >= -180 && angle <-90) return lookPoint.upRight;
-        else if (angle < 0 && angle > -91) return lookPoint.upLeft;
-        else if (angle > 0 && angle < 90) return lookPoint.downLeft;
-        else if (angle > 90 && angle <= 180) return lookPoint.downRight;
-        else return lookPoint.downRight;
+        var v2 = transform.position - _target.transform.position;
+        var angle = Mathf.Atan2(v2.y, v2.x) * Mathf.Rad2Deg;
+        if (angle >= -180 && angle <-90) return LookPoint.upRight;
+        if (angle < 0 && angle > -91) return LookPoint.upLeft;
+        if (angle > 0 && angle < 90) return LookPoint.downLeft;
+        if (angle > 90 && angle <= 180) return LookPoint.downRight;
+        return LookPoint.downRight;
+    }
+
+    private void Die()
+    {
+        if(ParentCombatZone != null) ParentCombatZone.EnemyKilled(this);
     }
 
     #endregion

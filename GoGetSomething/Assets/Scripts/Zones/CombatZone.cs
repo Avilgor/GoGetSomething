@@ -33,8 +33,8 @@ public class CombatZone : Zone
         Survive, Destroy, Rounds
     }
 
-    [SerializeField] protected Type CombatType;
-    [TabGroup("Combat")] [SerializeField] private EnemySpawners[] _enemySpawners;
+    [TabGroup("Combat")] [OnValueChanged("SetName")] [SerializeField] protected Type CombatType;
+    [TabGroup("Combat")] [SerializeField] protected EnemySpawners[] EnemySpawners;
 
     #endregion
 
@@ -57,9 +57,9 @@ public class CombatZone : Zone
 
     protected virtual void SpawnEnemies()
     {
-        for (int i = 0; i < _enemySpawners.Length; i++)
+        for (int i = 0; i < EnemySpawners.Length; i++)
         {
-            _enemySpawners[i].Spawner.StartSpawn();
+            EnemySpawners[i].Spawner.StartSpawn();
         }
     }
 
@@ -67,6 +67,16 @@ public class CombatZone : Zone
     {
         PlayerController.I.Die();
         //TODO Reset to last saved point
+    }
+
+    public virtual void EnemyKilled(Enemy enemy)
+    {
+        
+    }
+
+    public void SetName()
+    {
+        gameObject.name = "[" + ID + "] - " + CombatType + " Zone";
     }
     #endregion
 }
