@@ -27,6 +27,8 @@ public class Enemy : MonoBehaviour
     #region Fields
     [SerializeField] private NavMeshAgent _agent;
     [SerializeField] private Animator _anim;
+    [SerializeField] private GameObject _deathParticles;
+    [SerializeField] private int _AttackDmg;
 
     public bool _attacking;
     private bool _stop;
@@ -118,6 +120,15 @@ public class Enemy : MonoBehaviour
     private void Die()
     {
         if(ParentCombatZone != null) ParentCombatZone.EnemyKilled(this);
+    }
+
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.CompareTag("PlayerWeap"))
+        {
+            Instantiate(_deathParticles, transform.position, Quaternion.identity);
+            Destroy(gameObject);
+        }
     }
 
     #endregion
