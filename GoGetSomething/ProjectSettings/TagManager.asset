@@ -9,6 +9,8 @@ TagManager:
   - Bonfire
   - Damagable
   - Bone
+  - Porra
+  - PlayerWeap
   layers:
   - Default
   - TransparentFX

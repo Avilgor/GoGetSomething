@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class PlayerController : Singleton<PlayerController>
 {
     #region Fields
-    private enum forwardPointer
+    public enum forwardPointer
     {
         back=0,
         front,
@@ -19,7 +19,8 @@ public class PlayerController : Singleton<PlayerController>
     private enum weapon
     {
         nude = 0,
-        bone
+        bone,
+        porra
     }
     enum PlayerState
     {
@@ -30,7 +31,11 @@ public class PlayerController : Singleton<PlayerController>
         WalkUp,
         WalkDown,
         Attack,
+        damaged,
     }
+
+    [Title("Player variables")]
+    [SerializeField] private int _health = 100;
 
     [Title("Setup")]
     [SerializeField] private float _velocity = 0.08f;
@@ -42,10 +47,11 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField] private Animator _anim;
 
     private PlayerState _currentState, _newState;
-    private forwardPointer _aimDirection;
+    public forwardPointer _aimDirection;
     private weapon _weaponEquiped;
-    private bool _automaticMove;
-    public bool _attacking;
+    private Vector2 kick = new Vector2(0,0);
+    private bool _automaticMove,_forceCheck;
+    public bool _attacking,_gotDamaged;
 
     public float Velocity => _velocity * Time.deltaTime;
 
@@ -60,6 +66,8 @@ public class PlayerController : Singleton<PlayerController>
         _currentState = PlayerState.Idle;
         _weaponEquiped = weapon.nude;
         _attacking = false;
+        _forceCheck = false;
+        _gotDamaged = false;
         StartGame();
     }
 
@@ -109,16 +117,19 @@ public class PlayerController : Singleton<PlayerController>
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            gameObject.SetActive(false);
-        }
-
+    {        
         if (collision.gameObject.CompareTag("Bone"))
         {
             _weaponEquiped = weapon.bone;
             collision.gameObject.SetActive(false);
+            _forceCheck = true;
+        }
+
+        if (collision.gameObject.CompareTag("Porra"))
+        {
+            _weaponEquiped = weapon.porra;
+            collision.gameObject.SetActive(false);
+            _forceCheck = true;
         }
     }
 
@@ -139,6 +150,14 @@ public class PlayerController : Singleton<PlayerController>
         else if (col.CompareTag("Damagable"))
         {
             col.GetComponent<IDamagable>().Damage(10);
+        }
+
+        if (col.gameObject.CompareTag("Enemy"))
+        {
+            _newState = PlayerState.damaged;
+ //           kick = transform.position - col.gameObject.transform.position;
+ //           kick.Normalize();
+            
         }
     }
 
@@ -167,7 +186,7 @@ public class PlayerController : Singleton<PlayerController>
 
     private void CheckStates()
     {
-        if (_currentState != _newState)
+        if (_currentState != _newState || _forceCheck)
         {            
             switch (_newState)
             {
@@ -181,7 +200,13 @@ public class PlayerController : Singleton<PlayerController>
                             break;
                         case weapon.bone:
                             _anim.SetBool("walk", false);
+                            _anim.SetBool("withPorra", false);
                             _anim.SetBool("withBone", true);
+                            break;
+                        case weapon.porra:
+                            _anim.SetBool("withBone", false);
+                            _anim.SetBool("walk", false);
+                            _anim.SetBool("withPorra", true);
                             break;
                     }
                     
@@ -199,7 +224,13 @@ public class PlayerController : Singleton<PlayerController>
                             break;
                         case weapon.bone:
                             _anim.SetBool("walk", true);
+                            _anim.SetBool("withPorra", false);
                             _anim.SetBool("withBone", true);
+                            break;
+                        case weapon.porra:
+                            _anim.SetBool("withBone", false);
+                            _anim.SetBool("walk", true);
+                            _anim.SetBool("withPorra", true);
                             break;
                     }
                     
@@ -214,7 +245,13 @@ public class PlayerController : Singleton<PlayerController>
                             break;
                         case weapon.bone:
                             _anim.SetBool("walk", true);
+                            _anim.SetBool("withPorra", false);
                             _anim.SetBool("withBone", true);
+                            break;
+                        case weapon.porra:
+                            _anim.SetBool("withBone", true);
+                            _anim.SetBool("walk", true);
+                            _anim.SetBool("withPorra", true);
                             break;
                     }               
                     break;
@@ -228,7 +265,13 @@ public class PlayerController : Singleton<PlayerController>
                             break;
                         case weapon.bone:
                             _anim.SetBool("walk", true);
+                            _anim.SetBool("withPorra", false);
                             _anim.SetBool("withBone", true);
+                            break;
+                        case weapon.porra:
+                            _anim.SetBool("withBone", false);
+                            _anim.SetBool("walk", true);
+                            _anim.SetBool("withPorra", true);
                             break;
                     }
                     break;
@@ -242,13 +285,57 @@ public class PlayerController : Singleton<PlayerController>
                             break;
                         case weapon.bone:
                             _anim.SetBool("walk", true);
-                            _anim.SetBool("withBone", true);
+                            _anim.SetBool("withPorra", false);
+                            _anim.SetBool("withBone", true);                          
+                            break;
+                        case weapon.porra:
+                            _anim.SetBool("withBone", false);
+                            _anim.SetBool("walk", true);
+                            _anim.SetBool("withPorra", true);
                             break;
                     }
                     break;
                 case PlayerState.Attack:
+                    switch (_weaponEquiped)
+                    {
+                        case weapon.nude:
+                            _anim.SetBool("withPorra", false);
+                            _anim.SetBool("withBone", false);
+                            break;
+                        case weapon.bone:
+                            _anim.SetBool("withPorra", false);
+                            _anim.SetBool("withBone", true);
+                            break;
+                        case weapon.porra:
+                            _anim.SetBool("withPorra", true);
+                            _anim.SetBool("withBone", false);
+                            break;
+                    }
                     _anim.SetTrigger("attack");
                     break;
+                case PlayerState.damaged:
+/*                    _gotDamaged = true;
+                    StartCoroutine(wait(0.8f));
+                    switch (_aimDirection)
+                    {
+                        case forwardPointer.back:
+                            kick = new Vector2(0, 40);
+                            break;
+                        case forwardPointer.front:
+                            kick = new Vector2(0, -40);
+                            break;
+                        case forwardPointer.right:
+                            kick = new Vector2(40, 0);
+                            
+                            break;
+                        case forwardPointer.left:
+                            kick = new Vector2(-40, 0);
+                            break;
+                    }
+                    _rb.AddForce(-kick*500);
+*/                    gameObject.SetActive(false);
+                    break;
+
             }
 
             switch (_aimDirection)
@@ -267,6 +354,7 @@ public class PlayerController : Singleton<PlayerController>
                     break;
             }
             _currentState = _newState;
+            _forceCheck = false;
         }
     }
 
@@ -317,7 +405,7 @@ public class PlayerController : Singleton<PlayerController>
         }
         else
         {
-            if (!_attacking)
+            if (!_attacking && !_gotDamaged)
             {
                 if (Input.GetKey(KeyCode.W))
                 {
@@ -357,6 +445,12 @@ public class PlayerController : Singleton<PlayerController>
     private void StartGame()
     {
         if (User.LastSavedPlayerPosition() != Vector2.zero) transform.position = User.LastSavedPlayerPosition();
+    }
+
+    IEnumerator wait(float time)
+    {
+        yield return new WaitForSeconds(time);
+        _gotDamaged = false;
     }
 
     #endregion

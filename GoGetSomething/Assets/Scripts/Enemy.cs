@@ -120,5 +120,13 @@ public class Enemy : MonoBehaviour
         if(ParentCombatZone != null) ParentCombatZone.EnemyKilled(this);
     }
 
+    void OnTriggerEnter2D(Collider2D col)
+    {     
+        if (col.gameObject.CompareTag("PlayerWeap"))
+        {
+            Destroy(gameObject);
+        }
+    }
+
     #endregion
 }
