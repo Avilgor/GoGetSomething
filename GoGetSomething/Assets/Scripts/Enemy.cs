@@ -128,7 +128,7 @@ public class Enemy : MonoBehaviour
         if (col.gameObject.CompareTag("PlayerWeap"))
         {
             Debug.Log("enemyDestroyed");
-            Instantiate(_deathParticles, new Vector3(0, 0, 0), Quaternion.identity);
+            Instantiate(_deathParticles, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
     }

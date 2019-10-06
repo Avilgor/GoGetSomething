@@ -337,7 +337,7 @@ public class PlayerController : Singleton<PlayerController>
                                         _DieParticles
                     */
                     _DieParticles.GetComponent<ParticleSystem>().Play();
-                    Instantiate(_DieParticles, new Vector3(0, 0, 0), Quaternion.identity);
+                    Instantiate(_DieParticles, transform.position, Quaternion.identity);
                     gameObject.SetActive(false);
                     break;
 
