@@ -1,19 +1,25 @@
 fileFormatVersion: 2
-guid: be40d70ecf0a2554a9fd3707d49d289a
+guid: b18822b243ddab546bbf7efd6ca7977b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7644736921307691382
-    second: Idle_front_0
+      213: -7251620085126382781
+    second: Enemy_Attack_Front_Left_0
   - first:
-      213: -4183177065788527487
-    second: Idle_front_1
+      213: -5976066801355182960
+    second: Enemy_Attack_Front_Left_1
   - first:
-      213: -7968776721316203694
-    second: Idle_front_2
+      213: -5370880420998592669
+    second: Enemy_Attack_Front_Left_2
   - first:
-      213: 8440313904202303874
-    second: Idle_front_3
+      213: -3203052069185117916
+    second: Enemy_Attack_Front_Left_3
+  - first:
+      213: 5867479240361406492
+    second: Enemy_Attack_Front_Left_4
+  - first:
+      213: -139323642193865922
+    second: Enemy_Attack_Front_Left_5
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -98,13 +104,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Idle_front_0
+      name: Enemy_Attack_Front_Left_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 16
-        height: 16
+        width: 32
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -112,41 +118,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 04bfb99e7967a104195621f1e71f4947
-      internalID: 7644736921307691382
+      spriteID: 24610847428e92e4089be084b94b0da0
+      internalID: -7251620085126382781
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Idle_front_1
-      rect:
-        serializedVersion: 2
-        x: 16
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d368f69d91365fe4a99e37213abdc1af
-      internalID: -4183177065788527487
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Idle_front_2
+      name: Enemy_Attack_Front_Left_1
       rect:
         serializedVersion: 2
         x: 32
         y: 0
-        width: 16
-        height: 16
+        width: 32
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,20 +139,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4715d612290457f459618f08082a7073
-      internalID: -7968776721316203694
+      spriteID: a204744f483bb7f40bd660b839714655
+      internalID: -5976066801355182960
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Idle_front_3
+      name: Enemy_Attack_Front_Left_2
       rect:
         serializedVersion: 2
-        x: 48
+        x: 64
         y: 0
-        width: 16
-        height: 16
+        width: 32
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -175,8 +160,71 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ab87b9def73f2344fa9e13d18e29a58b
-      internalID: 8440313904202303874
+      spriteID: c43ab9b1678090847a005cbe582b530a
+      internalID: -5370880420998592669
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enemy_Attack_Front_Left_3
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 32
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8ff5e491d6ed14b4b9691c199f8074be
+      internalID: -3203052069185117916
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enemy_Attack_Front_Left_4
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 32
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 49c86390c21672e41827f980c5853c4e
+      internalID: 5867479240361406492
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Enemy_Attack_Front_Left_5
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 32
+        height: 24
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fed74c72aef530c429f708538254cb6e
+      internalID: -139323642193865922
       vertices: []
       indices: 
       edges: []
