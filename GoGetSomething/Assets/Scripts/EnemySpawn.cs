@@ -50,12 +50,11 @@ public class EnemySpawn : MonoBehaviour
         var type = PossibleEnemies[Random.Range(0, PossibleEnemies.Length)];
 
         var enemy = SimplePool.Spawn(EnemyList.I.GetEnemyPrefab(type), transform.position, Quaternion.identity).transform;
-        enemy.GetComponent<Enemy>().ParentCombatZone = _combatZone;
         enemy.SetParent(transform);
 
         if (_combatZone != null)
         {
-            
+            enemy.GetComponent<Enemy>().ParentCombatZone = _combatZone;
         }
     }
     #endregion
