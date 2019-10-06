@@ -14,4 +14,15 @@ public class AnimationEventsHandler : MonoBehaviour
     }
 
     #endregion
+
+    #region Enemy events
+
+    [SerializeField] public GameObject enemy;
+
+    public void onAttackDone()
+    {
+        enemy.GetComponent<Enemy>()._attacking = false;
+    }
+
+    #endregion
 }

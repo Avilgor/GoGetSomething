@@ -28,6 +28,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private NavMeshAgent _agent;
     [SerializeField] private Animator _anim;
 
+    public bool _attacking;
     private bool _stop;
     private GameObject _target;
     private LookPoint directionPointer;
@@ -41,6 +42,7 @@ public class Enemy : MonoBehaviour
     {
         InitSetup();
         directionPointer = LookPoint.downRight;
+        _attacking = false;
     }
 
     private void Update()
@@ -90,11 +92,16 @@ public class Enemy : MonoBehaviour
         if ((transform.position - _target.transform.position).magnitude < 1 && !_stop)
         {
             Debug.Log("Enemy Attack");
-            //TODO Hit
+            _anim.SetBool("attack", true);
+            _attacking = true;
+        }
+        else { _anim.SetBool("attack", false); }
+        if (!_attacking)
+        {
+            _agent.SetDestination(_target.transform.position);
+            Navigate.DebugDrawPath(_agent.path.corners);
         }
 
-        _agent.SetDestination(_target.transform.position);
-        Navigate.DebugDrawPath(_agent.path.corners);        
     }
 
     private LookPoint CalculateAngleDirection()
