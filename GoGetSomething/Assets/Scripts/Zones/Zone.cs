@@ -27,13 +27,14 @@ public class Zone : MonoBehaviour
         ShowZone();
     }
 
-    protected virtual void Start()
-    {
-        if(!_isInitZone) HideZone();
-    }
+//    protected virtual void Start()
+//    {
+//        if(!_isInitZone) HideZone();
+//    }
 
     public virtual void Enter()
     {
+        EventManager.OnCleanPlayer();
         EventManager.OnZoneEntered(this);
         if (ZoneType == ZoneType.Combat) CloseSwitches();
         ShowZone();
@@ -96,7 +97,6 @@ public class Zone : MonoBehaviour
 
     protected virtual void ZoneReady()
     {
-        Debug.Log("??");
         EventManager.OnZoneReady();
     }
 

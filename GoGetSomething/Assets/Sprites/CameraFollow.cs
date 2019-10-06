@@ -18,6 +18,11 @@ public class CameraFollow : MonoBehaviour
 
     #region MonoBehaviour Functions
 
+    private void Start()
+    {
+        transform.position = _target.position + Vector3.forward * _distance;
+    }
+
     private void FixedUpdate()
     {
         transform.DOMove(_target.position + Vector3.forward * _distance, _smooth).SetEase(Ease.InOutSine).SetUpdate(UpdateType.Fixed);

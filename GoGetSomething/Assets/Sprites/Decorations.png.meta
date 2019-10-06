@@ -1,19 +1,25 @@
 fileFormatVersion: 2
-guid: 1ee2903a56ae0ce40b8a3200619a9ffc
+guid: f09baa53658c55742963d3c055c82d95
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 6617194716825078457
-    second: Idle_Right_0
+      213: 4234090705077185718
+    second: Decorations_0
   - first:
-      213: 6281449477019138656
-    second: Idle_Right_1
+      213: 5936755781256884489
+    second: Decorations_1
   - first:
-      213: -4037298230109772529
-    second: Idle_Right_2
+      213: -4254563025835751457
+    second: Decorations_2
   - first:
-      213: -1703130807304303487
-    second: Idle_Right_3
+      213: -6378001285771275336
+    second: Decorations_3
+  - first:
+      213: -5616891256712012705
+    second: Decorations_4
+  - first:
+      213: 6598800818792424630
+    second: Decorations_5
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -98,7 +104,91 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Idle_Right_0
+      name: Decorations_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9da607e7a258e0146acfeca684f83d24
+      internalID: 4234090705077185718
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Decorations_1
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 71c14c53fdd431e4699f5614c0bdd4ce
+      internalID: 5936755781256884489
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Decorations_2
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 868ff45571bffe84ba25552cd89aa020
+      internalID: -4254563025835751457
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Decorations_3
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 86af71ea6aae66b40b99db4fd4fc273d
+      internalID: -6378001285771275336
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Decorations_4
       rect:
         serializedVersion: 2
         x: 0
@@ -112,14 +202,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3cb1c01df21781a4987b65cd954d3f68
-      internalID: 6617194716825078457
+      spriteID: a5397cb757471a04688495d16d8604b0
+      internalID: -5616891256712012705
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Idle_Right_1
+      name: Decorations_5
       rect:
         serializedVersion: 2
         x: 16
@@ -133,50 +223,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 61c26581349a62d4984e09b21023f7d9
-      internalID: 6281449477019138656
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Idle_Right_2
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 97bef745a7415e344a88ceae510c9b6c
-      internalID: -4037298230109772529
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Idle_Right_3
-      rect:
-        serializedVersion: 2
-        x: 48
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c0ab08afd4c2a77449e95d68d8ccab8d
-      internalID: -1703130807304303487
+      spriteID: 4b2beb049263a1a43ae03c91ef502bb2
+      internalID: 6598800818792424630
       vertices: []
       indices: 
       edges: []

@@ -16,6 +16,8 @@ public class CombatZone : Zone
     }
 
     [SerializeField] protected Type CombatType;
+//    [SerializeField] private Transform[] _weaponSpawns;
+//    [SerializeField] private Transform[] _enemiesSpawns;
 
     #endregion
 
