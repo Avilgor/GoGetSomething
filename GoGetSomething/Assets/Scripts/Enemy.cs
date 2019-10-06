@@ -61,7 +61,19 @@ public class Enemy : MonoBehaviour
                 break;
         }
     }
+    private void OnEnable()
+    {
+        EventManager.KillAllEnemies += Die;
+    }
 
+    private void OnDisable()
+    {
+        EventManager.KillAllEnemies -= Die;
+    }
+    private void Die()
+    {
+
+    }
     #endregion
 
     #region Other Functions

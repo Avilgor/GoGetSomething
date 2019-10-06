@@ -45,6 +45,7 @@ public class PlayerController : Singleton<PlayerController>
     private forwardPointer _aimDirection;
     private weapon _weaponEquiped;
     private bool _automaticMove;
+    public bool _attacking;
 
     public float Velocity => _velocity * Time.deltaTime;
 
@@ -58,6 +59,7 @@ public class PlayerController : Singleton<PlayerController>
         _aimDirection = forwardPointer.front;
         _currentState = PlayerState.Idle;
         _weaponEquiped = weapon.nude;
+        _attacking = false;
         StartGame();
     }
 
@@ -111,6 +113,12 @@ public class PlayerController : Singleton<PlayerController>
         if (collision.gameObject.CompareTag("Enemy"))
         {
             gameObject.SetActive(false);
+        }
+
+        if (collision.gameObject.CompareTag("Bone"))
+        {
+            _weaponEquiped = weapon.bone;
+            collision.gameObject.SetActive(false);
         }
     }
 
@@ -309,29 +317,33 @@ public class PlayerController : Singleton<PlayerController>
         }
         else
         {
-            if (Input.GetKey(KeyCode.W))
+            if (!_attacking)
             {
-                _newState = PlayerState.WalkUp;
-                transform.position += new Vector3(0, Velocity, 0);
-            }
-            if (Input.GetKey(KeyCode.S))
-            {
-                _newState = PlayerState.WalkDown;
-                transform.position += new Vector3(0, -Velocity, 0);
-            }
-            if (Input.GetKey(KeyCode.A))
-            {
-                _newState = PlayerState.WalkLeft;
-                transform.position += new Vector3(-Velocity, 0, 0);
-            }
-            if (Input.GetKey(KeyCode.D))
-            {
-                _newState = PlayerState.WalkRight;
-                transform.position += new Vector3(Velocity, 0, 0);
-            }
+                if (Input.GetKey(KeyCode.W))
+                {
+                    _newState = PlayerState.WalkUp;
+                    transform.position += new Vector3(0, Velocity, 0);
+                }
+                if (Input.GetKey(KeyCode.S))
+                {
+                    _newState = PlayerState.WalkDown;
+                    transform.position += new Vector3(0, -Velocity, 0);
+                }
+                if (Input.GetKey(KeyCode.A))
+                {
+                    _newState = PlayerState.WalkLeft;
+                    transform.position += new Vector3(-Velocity, 0, 0);
+                }
+                if (Input.GetKey(KeyCode.D))
+                {
+                    _newState = PlayerState.WalkRight;
+                    transform.position += new Vector3(Velocity, 0, 0);
+                }
+            }           
             if (Input.GetKey(KeyCode.Space))
             {
-                _newState = PlayerState.BoneAttack;                
+                _newState = PlayerState.BoneAttack;
+                _attacking = true;
             }
         }
     }

@@ -8,6 +8,7 @@ TagManager:
   - SwitchZone
   - Bonfire
   - Damagable
+  - Bone
   layers:
   - Default
   - TransparentFX
