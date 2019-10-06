@@ -28,8 +28,9 @@ public class TriggerSwitchZone : MonoBehaviour
         if (_toZone == currentZone) return;
         
         if(currentZone.ID != null) currentZone.Exit();
-        _toZone.Enter();
+        if (User.IsZoneCompleted(_toZone.ID)) return;
 
+        _toZone.Enter();
         player.ChangeZone(_toZone);
         _switch.Switch(player, _isRed);
     }

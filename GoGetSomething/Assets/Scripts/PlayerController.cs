@@ -39,8 +39,10 @@ public class PlayerController : Singleton<PlayerController>
 
     void Start()
     {
-        _currentZone.EnterInitZone();
+//        _currentZone.EnterInitZone();
         _currentState = PlayerState.Idle;
+
+        StartGame();
     }
 
 
@@ -55,8 +57,11 @@ public class PlayerController : Singleton<PlayerController>
 #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.R))
         {
+            Die();
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
+        else if (Input.GetKeyDown(KeyCode.F)) User.Firedust++;
+        else if (Input.GetKeyDown(KeyCode.G)) User.Firedust--;
 #endif
     }
     private void FixedUpdate()
@@ -73,12 +78,16 @@ public class PlayerController : Singleton<PlayerController>
     {
         EventManager.ZoneEntered += ZoneEntered;
         EventManager.ZoneReady += ZoneReady;
+        EventManager.PopupOpened += PopupOpened;
+        EventManager.PopupsClosed += PopupsClosed;
     }
 
     private void OnDisabled()
     {
         EventManager.ZoneEntered -= ZoneEntered;
         EventManager.ZoneReady -= ZoneReady;
+        EventManager.PopupOpened -= PopupOpened;
+        EventManager.PopupsClosed -= PopupsClosed;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -92,15 +101,41 @@ public class PlayerController : Singleton<PlayerController>
     void OnTriggerEnter2D(Collider2D col)
     {
         Debug.Log(col.gameObject.name + " : " + gameObject.name + " : " + Time.time);
+        Debug.Log("Tag: "+col.gameObject.tag);
+
         if (col.CompareTag("SwitchZone"))
         {
             col.GetComponent<TriggerSwitchZone>().SwitchZoneTriggerEntered(_currentZone, this);
+        }
+        else if (col.CompareTag("Bonfire"))
+        {
+            Debug.Log("Bonfire");
+            col.GetComponent<Bonfire>().Interact();
+        }
+    }
+
+    void OnTriggerExit2D(Collider2D col)
+    {
+        if (col.CompareTag("Bonfire"))
+        {
+            Debug.Log("Bonfire Exit");
+            col.GetComponent<Bonfire>().HidePopup();
         }
     }
 
     #endregion
 
     #region Other Functions
+
+    private void PopupOpened()
+    {
+//        AutomaticMovement(true);
+    }
+
+    private void PopupsClosed()
+    {
+//        AutomaticMovement(false);
+    }
 
     private void CheckStates()
     {
@@ -224,6 +259,17 @@ public class PlayerController : Singleton<PlayerController>
                 transform.position += new Vector3(Velocity, 0, 0);
             }
         }
+    }
+
+    public void Die()
+    {
+        Debug.Log("Player Died");
+        User.ClearZonesQueued();
+    }
+
+    private void StartGame()
+    {
+        if (User.LastSavedPlayerPosition() != Vector2.zero) transform.position = User.LastSavedPlayerPosition();
     }
 
     #endregion
