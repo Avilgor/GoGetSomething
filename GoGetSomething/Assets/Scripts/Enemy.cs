@@ -81,6 +81,7 @@ public class Enemy : MonoBehaviour
             Debug.Log("Enemy Attack");
             //TODO Hit
         }
+
         _agent.SetDestination(_target.transform.position);
         Navigate.DebugDrawPath(_agent.path.corners);        
     }

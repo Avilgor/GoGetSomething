@@ -9,6 +9,7 @@ using MEC;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
+
 public class SurviveCombatZone : CombatZone
 {
     #region Fields
@@ -16,23 +17,6 @@ public class SurviveCombatZone : CombatZone
     [TabGroup("Survive")] [SerializeField] private int _time = 30;
     [TabGroup("Survive")] [SerializeField] private EnemySpawners[] _enemySpawners;
 //    [Space]
-
-    [Serializable]
-    public class EnemySpawners
-    {
-        public EnemySpawn Spawner;
-        [OnValueChanged("UpdateSpawner")] public Vector2 SpawnTimeRate;
-        [OnValueChanged("UpdateSpawner")] public EnemyType[] PossibleEnemies;
-
-        public void UpdateSpawner()
-        {
-            if (Spawner != null)
-            {
-                Spawner.SpawnTimeRate = SpawnTimeRate;
-                Spawner.PossibleEnemies = PossibleEnemies;
-            }
-        }
-    }
 
     #endregion
 

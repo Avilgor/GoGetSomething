@@ -3,7 +3,26 @@
  * Created by Akeru on 05/10/2019
  */
 
+using System;
+using Sirenix.OdinInspector;
 using UnityEngine;
+
+[Serializable]
+public class EnemySpawners
+{
+    public EnemySpawn Spawner;
+    [OnValueChanged("UpdateSpawner")] public Vector2 SpawnTimeRate;
+    [OnValueChanged("UpdateSpawner")] public EnemyType[] PossibleEnemies;
+
+    public void UpdateSpawner()
+    {
+        if (Spawner != null)
+        {
+            Spawner.SpawnTimeRate = SpawnTimeRate;
+            Spawner.PossibleEnemies = PossibleEnemies;
+        }
+    }
+}
 
 public class CombatZone : Zone
 {

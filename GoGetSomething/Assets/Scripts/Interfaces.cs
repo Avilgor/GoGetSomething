@@ -1,11 +1,11 @@
 /**
- * DestroyCombatZone.cs
- * Created by Akeru on 05/10/2019
+ * Interficies.cs
+ * Created by Akeru on 06/10/2019
  */
 
 using UnityEngine;
 
-public class DestroyCombatZone : CombatZone
+public class Interficies : MonoBehaviour
 {
     #region Fields
 

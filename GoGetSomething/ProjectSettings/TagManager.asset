@@ -7,6 +7,7 @@ TagManager:
   - Enemy
   - SwitchZone
   - Bonfire
+  - Damagable
   layers:
   - Default
   - TransparentFX

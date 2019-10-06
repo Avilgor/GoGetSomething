@@ -128,6 +128,10 @@ public class PlayerController : Singleton<PlayerController>
             Debug.Log("Bonfire");
             col.GetComponent<Bonfire>().Interact();
         }
+        else if (col.CompareTag("Damagable"))
+        {
+            col.GetComponent<IDamagable>().Damage(10);
+        }
     }
 
     void OnTriggerExit2D(Collider2D col)
