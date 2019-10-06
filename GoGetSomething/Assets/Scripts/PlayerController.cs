@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class PlayerController : Singleton<PlayerController>
 {
     #region Fields
-    enum forwardPointer
+    private enum forwardPointer
     {
         back=0,
         front,
@@ -16,6 +16,11 @@ public class PlayerController : Singleton<PlayerController>
         right
     }
 
+    private enum weapon
+    {
+        nude = 0,
+        bone
+    }
     enum PlayerState
     {
         Idle = 0,
@@ -24,7 +29,7 @@ public class PlayerController : Singleton<PlayerController>
         WalkLeft,
         WalkUp,
         WalkDown,
-        Punch,
+        BoneAttack,
     }
 
     [Title("Setup")]
@@ -38,6 +43,7 @@ public class PlayerController : Singleton<PlayerController>
 
     private PlayerState _currentState, _newState;
     private forwardPointer _aimDirection;
+    private weapon _weaponEquiped;
     private bool _automaticMove;
 
     public float Velocity => _velocity * Time.deltaTime;
@@ -51,6 +57,7 @@ public class PlayerController : Singleton<PlayerController>
 //        _currentZone.EnterInitZone();
         _aimDirection = forwardPointer.front;
         _currentState = PlayerState.Idle;
+        _weaponEquiped = weapon.nude;
         StartGame();
     }
 
@@ -154,34 +161,81 @@ public class PlayerController : Singleton<PlayerController>
             {
                 case PlayerState.Idle:
                     _rb.velocity = new Vector2(0, 0);
-                    _anim.SetBool("walk", false);
-                    _anim.SetBool("withBone", false);
+                    switch (_weaponEquiped)
+                    {
+                        case weapon.nude:
+                            _anim.SetBool("walk", false);
+                            _anim.SetBool("withBone", false);
+                            break;
+                        case weapon.bone:
+                            _anim.SetBool("walk", false);
+                            _anim.SetBool("withBone", true);
+                            break;
+                    }
+                    
                     break;
                 case PlayerState.Death:
                     gameObject.SetActive(false);
                     break;
                 case PlayerState.WalkUp:
                     _aimDirection = forwardPointer.back;
-                    _anim.SetBool("walk", true);
-                    _anim.SetBool("withBone", false);
+                    switch (_weaponEquiped)
+                    {
+                        case weapon.nude:
+                            _anim.SetBool("walk", true);
+                            _anim.SetBool("withBone", false);
+                            break;
+                        case weapon.bone:
+                            _anim.SetBool("walk", true);
+                            _anim.SetBool("withBone", true);
+                            break;
+                    }
+                    
                     break;
                 case PlayerState.WalkDown:
                     _aimDirection = forwardPointer.front;
-                    Debug.Log(_aimDirection);
-                    _anim.SetBool("walk", true);
-                    _anim.SetBool("withBone", false);
+                    switch (_weaponEquiped)
+                    {
+                        case weapon.nude:
+                            _anim.SetBool("walk", true);
+                            _anim.SetBool("withBone", false);
+                            break;
+                        case weapon.bone:
+                            _anim.SetBool("walk", true);
+                            _anim.SetBool("withBone", true);
+                            break;
+                    }               
                     break;
                 case PlayerState.WalkLeft:
                     _aimDirection = forwardPointer.left;
-                    _anim.SetBool("walk", true);
-                    _anim.SetBool("withBone", false);
+                    switch (_weaponEquiped)
+                    {
+                        case weapon.nude:
+                            _anim.SetBool("walk", true);
+                            _anim.SetBool("withBone", false);
+                            break;
+                        case weapon.bone:
+                            _anim.SetBool("walk", true);
+                            _anim.SetBool("withBone", true);
+                            break;
+                    }
                     break;
                 case PlayerState.WalkRight:
                     _aimDirection = forwardPointer.right;
-                    _anim.SetBool("walk", true);
-                    _anim.SetBool("withBone", false);
+                    switch (_weaponEquiped)
+                    {
+                        case weapon.nude:
+                            _anim.SetBool("walk", true);
+                            _anim.SetBool("withBone", false);
+                            break;
+                        case weapon.bone:
+                            _anim.SetBool("walk", true);
+                            _anim.SetBool("withBone", true);
+                            break;
+                    }
                     break;
-                case PlayerState.Punch:
+                case PlayerState.BoneAttack:
+                    _anim.SetTrigger("boneAttack");
                     break;
             }
 
@@ -270,6 +324,10 @@ public class PlayerController : Singleton<PlayerController>
             {
                 _newState = PlayerState.WalkRight;
                 transform.position += new Vector3(Velocity, 0, 0);
+            }
+            if (Input.GetKey(KeyCode.Space))
+            {
+                _newState = PlayerState.BoneAttack;                
             }
         }
     }
