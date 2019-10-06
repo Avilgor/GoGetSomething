@@ -1,5 +1,5 @@
 /**
- * CombatZone.cs
+ * SafeZone.cs
  * Created by Akeru on 05/10/2019
  */
 

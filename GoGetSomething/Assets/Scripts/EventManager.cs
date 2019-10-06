@@ -16,6 +16,7 @@ public class EventManager : MonoBehaviour
     public delegate void StringDelegate(string value);
 
     public delegate void ZoneDelegate(Zone zone);
+    public delegate void BonfireDelegate(Bonfire bonfire);
 
     #endregion
 
@@ -29,14 +30,15 @@ public class EventManager : MonoBehaviour
 
     public static void OnKillAllEnemies() { KillAllEnemies?.Invoke(); }
 
-
     #endregion
 
     #region Zones
     public static event VoidDelegate SaveProcess, CleanPlayer, ZoneReady;
-    public static event ZoneDelegate ZoneEntered, ZoneCompleted, ZoneExit;
     public static event IntDelegate StartSurvivalTiming;
+    public static event ZoneDelegate ZoneEntered, ZoneCompleted, ZoneExit;
+    public static event BonfireDelegate BonfireInteracted;
 
+    public static void OnBonfireInteracted(Bonfire bonfire) { BonfireInteracted?.Invoke(bonfire); }
     public static void OnZoneReady() { ZoneReady?.Invoke(); }
     public static void OnCleanPlayer() { CleanPlayer?.Invoke(); }
     public static void OnSaveProcess() { SaveProcess?.Invoke(); }
@@ -45,6 +47,14 @@ public class EventManager : MonoBehaviour
     public static void OnStartSurvivalTiming(int time) { StartSurvivalTiming?.Invoke(time); }
     public static void OnZoneCompleted(Zone zone) { ZoneCompleted?.Invoke(zone); }
     public static void OnZoneExit(Zone zone) { ZoneExit?.Invoke(zone); }
+
+    #endregion
+
+    #region Popups
+
+    public static event VoidDelegate PopupOpened, PopupsClosed;
+    public static void OnPopupOpened() { PopupOpened?.Invoke(); }
+    public static void OnPopupsClosed() { PopupsClosed?.Invoke(); }
 
     #endregion
     #endregion

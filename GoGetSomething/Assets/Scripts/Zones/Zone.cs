@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using DG.Tweening;
 using MEC;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -13,8 +14,8 @@ public enum ZoneType
 
 public class Zone : MonoBehaviour
 {
-    [SerializeField] protected ZoneType ZoneType = ZoneType.Null;
-    [SerializeField] protected int IID;
+    [ReadOnly] [Tooltip("Change it in 'IdsController' Script")] public ZoneType ZoneType = ZoneType.Null;
+    [ReadOnly] [Tooltip("Change it in 'IdsController' Script")] public int IID;
     [SerializeField] private bool _isInitZone;
     [SerializeField] private Tilemap[] _tilemapsToShowHide;
     [SerializeField] private SwitchZone[] _switches;

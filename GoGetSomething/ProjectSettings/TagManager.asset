@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Enemy
   - SwitchZone
+  - Bonfire
   layers:
   - Default
   - TransparentFX

@@ -10,10 +10,48 @@ using UnityEngine;
 
 public class User : MonoBehaviour
 {
-    public static string Uuid
+    public static int Firedust
     {
-        get { return ObscuredPrefs.GetString("Uuid"); }
-        set { ObscuredPrefs.SetString("Uuid", value); }
+        get { return ObscuredPrefs.GetInt("Firedust"); }
+        set
+        {
+            if (value < 0) value = 0;
+            ObscuredPrefs.SetInt("Firedust", value);
+            Debug.Log("Total Firedusts: "+Firedust);
+        }
+    }
+
+    public static void SetBonfireFired(int bonfireId, Vector2 playerPosition)
+    {
+        var realId = "Bonfire"+bonfireId;
+
+        var list = ObscuredPrefsX.GetStringArray("BonfireFired").ToList();
+        if (!list.Contains(realId))
+        {
+            list.Add(realId);
+            Debug.Log("Bonfire Fired: " + realId);
+        }
+        ObscuredPrefsX.SetStringArray("BonfireFired", list.ToArray());
+
+        ObscuredPrefsX.SetVector2("PlayerPositionSaved", playerPosition);
+    }
+
+    public static Vector2 LastSavedPlayerPosition()
+    {
+        return ObscuredPrefsX.GetVector2("PlayerPositionSaved", Vector2.zero);
+    }
+
+    public static bool IsBonfireFired(int bonfireId)
+    {
+        var realId = "Bonfire"+bonfireId;
+        var list = ObscuredPrefsX.GetStringArray("BonfireFired").ToList();
+        return list.Contains(realId);
+    }
+
+    public static void ClearZonesQueued()
+    {
+        ObscuredPrefsX.SetStringArray("ZonesCompletedQueue", new string[0]);
+        Debug.Log("Zones Queued Cleared");
     }
 
     public static void SetZoneCompletedQueue(string zoneId)
@@ -25,6 +63,15 @@ public class User : MonoBehaviour
             Debug.Log("Zone Completed Added in Queue: " + zoneId);
         }
         ObscuredPrefsX.SetStringArray("ZonesCompletedQueue", list.ToArray());
+    }
+
+    public static bool IsZoneCompleted(string zoneId)
+    {
+        var list = ObscuredPrefsX.GetStringArray("ZonesCompletedSaved").ToList();
+        if (list.Contains(zoneId)) return true;
+
+        var queueList = ObscuredPrefsX.GetStringArray("ZonesCompletedQueue").ToList();
+        return queueList.Contains(zoneId);
     }
 
     public static void SaveProcess()

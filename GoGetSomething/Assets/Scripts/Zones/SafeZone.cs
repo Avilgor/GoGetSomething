@@ -5,25 +5,18 @@
 
 using System.Collections.Generic;
 using MEC;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class SafeZone : Zone
 {
     #region Fields
 
+    [OnValueChanged("SetBonfireId")] [SerializeField] private Bonfire _bonfire;
+
     #endregion
 
     #region MonoBehaviour Functions
-
-    private void OnEnable()
-    {
-        EventManager.SaveProcess += SaveProcess;
-    }
-
-    private void OnDisable()
-    {
-        EventManager.SaveProcess -= SaveProcess;
-    }
 
     private void Reset()
     {
@@ -38,10 +31,9 @@ public class SafeZone : Zone
     {
     }
 
-    //TODO Maybe this shouldn't be here
-    private void SaveProcess()
+    private void SetBonfireId()
     {
-        User.SaveProcess();
+        _bonfire.ID = IID;
     }
     #endregion
 }
