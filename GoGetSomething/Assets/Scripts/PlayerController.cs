@@ -45,6 +45,7 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField] private BoxCollider2D _collider;
     [SerializeField] private Zone _currentZone;
     [SerializeField] private Animator _anim;
+    [SerializeField] private GameObject _DieParticles;
 
     private PlayerState _currentState, _newState;
     public forwardPointer _aimDirection;
@@ -314,26 +315,30 @@ public class PlayerController : Singleton<PlayerController>
                     _anim.SetTrigger("attack");
                     break;
                 case PlayerState.damaged:
-/*                    _gotDamaged = true;
-                    StartCoroutine(wait(0.8f));
-                    switch (_aimDirection)
-                    {
-                        case forwardPointer.back:
-                            kick = new Vector2(0, 40);
-                            break;
-                        case forwardPointer.front:
-                            kick = new Vector2(0, -40);
-                            break;
-                        case forwardPointer.right:
-                            kick = new Vector2(40, 0);
-                            
-                            break;
-                        case forwardPointer.left:
-                            kick = new Vector2(-40, 0);
-                            break;
-                    }
-                    _rb.AddForce(-kick*500);
-*/                    gameObject.SetActive(false);
+                    /*                    _gotDamaged = true;
+                                        StartCoroutine(wait(0.8f));
+                                        switch (_aimDirection)
+                                        {
+                                            case forwardPointer.back:
+                                                kick = new Vector2(0, 40);
+                                                break;
+                                            case forwardPointer.front:
+                                                kick = new Vector2(0, -40);
+                                                break;
+                                            case forwardPointer.right:
+                                                kick = new Vector2(40, 0);
+
+                                                break;
+                                            case forwardPointer.left:
+                                                kick = new Vector2(-40, 0);
+                                                break;
+                                        }
+                                        _rb.AddForce(-kick*500);
+                                        _DieParticles
+                    */
+                    _DieParticles.GetComponent<ParticleSystem>().Play();
+                    Instantiate(_DieParticles, new Vector3(0, 0, 0), Quaternion.identity);
+                    gameObject.SetActive(false);
                     break;
 
             }
@@ -452,6 +457,5 @@ public class PlayerController : Singleton<PlayerController>
         yield return new WaitForSeconds(time);
         _gotDamaged = false;
     }
-
     #endregion
 }

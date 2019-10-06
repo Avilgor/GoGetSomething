@@ -23,11 +23,13 @@ public class AnimationEventsHandler : MonoBehaviour
     public void boneAttack()
     {
         _boneAreas[(int)_player.GetComponent<PlayerController>()._aimDirection].SetActive(true);
+        Debug.Log("Attack " + _player.GetComponent<PlayerController>()._aimDirection);
     }
 
     public void porraAttack()
     {
         _porraAreas[(int)_player.GetComponent<PlayerController>()._aimDirection].SetActive(true);
+        Debug.Log("Attack " + _player.GetComponent<PlayerController>()._aimDirection);
     }
 
     #endregion

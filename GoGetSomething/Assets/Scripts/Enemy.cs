@@ -27,6 +27,7 @@ public class Enemy : MonoBehaviour
     #region Fields
     [SerializeField] private NavMeshAgent _agent;
     [SerializeField] private Animator _anim;
+    [SerializeField] private GameObject _deathParticles;
     [SerializeField] private int _AttackDmg;
 
     public bool _attacking;
@@ -122,9 +123,12 @@ public class Enemy : MonoBehaviour
     }
 
     void OnTriggerEnter2D(Collider2D col)
-    {     
+    {
+        Debug.Log("Collision detected");
         if (col.gameObject.CompareTag("PlayerWeap"))
         {
+            Debug.Log("enemyDestroyed");
+            Instantiate(_deathParticles, new Vector3(0, 0, 0), Quaternion.identity);
             Destroy(gameObject);
         }
     }
