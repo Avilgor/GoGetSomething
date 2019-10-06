@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5094546156008475542}
   - component: {fileID: 5094546156008475543}
-  - component: {fileID: 1986538718274763246}
+  - component: {fileID: 1526014454}
   m_Layer: 0
   m_Name: Enemy Nightmare 1
   m_TagString: Untagged
@@ -55,7 +55,7 @@ NavMeshAgent:
   m_BaseOffset: 0.5
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &1986538718274763246
+--- !u!114 &1526014454
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -64,10 +64,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5094546156008475561}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 728d03c8f1eb0fc458c8537c3feee3d9, type: 3}
+  m_Script: {fileID: 11500000, guid: 1fb29436e6c2ac04c85ada0b91e77508, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
+  _agent: {fileID: 5094546156008475543}
 --- !u!1 &5094546156696567602
 GameObject:
   m_ObjectHideFlags: 0

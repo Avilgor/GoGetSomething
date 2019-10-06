@@ -1,31 +1,35 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Singleton<PlayerController>
 {
     #region Fields
 
     enum PlayerState
     {
-        idle = 0,
-        death,
-        walkRight,
-        walkLeft,
-        walkUp,
-        walkDown,
-        punch,
+        Idle = 0,
+        Death,
+        WalkRight,
+        WalkLeft,
+        WalkUp,
+        WalkDown,
+        Punch,
     }
 
+    [Title("Setup")]
+    [SerializeField] private float _velocity = 0.08f;
+
+    [Title("References")]
     [SerializeField] private Rigidbody2D _rb;
     [SerializeField] private BoxCollider2D _collider;
-    [SerializeField] private float _velocity = 0.08f;
-    private PlayerState _currentState, _newState;
-    private bool _dontMove;
-
     [SerializeField] private Zone _currentZone;
+
+    private PlayerState _currentState, _newState;
+    private bool _automaticMove;
 
     public float Velocity => _velocity * Time.deltaTime;
 
@@ -36,7 +40,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         _currentZone.EnterInitZone();
-        _currentState = PlayerState.idle;
+        _currentState = PlayerState.Idle;
     }
 
 
@@ -104,33 +108,33 @@ public class PlayerController : MonoBehaviour
         {
             switch (_newState)
             {
-                case PlayerState.idle:
+                case PlayerState.Idle:
                     _rb.velocity = new Vector2(0, 0);
                     break;
-                case PlayerState.death:
+                case PlayerState.Death:
                     gameObject.SetActive(false);
                     break;
-                case PlayerState.walkUp:
+                case PlayerState.WalkUp:
                     /*_rb._velocity += new Vector2(0, 0);
                     if (_rb._velocity.y < 4)
                         _rb._velocity = new Vector2(0, _velocity);*/
                     break;
-                case PlayerState.walkDown:
+                case PlayerState.WalkDown:
                     /*_rb._velocity += new Vector2(0, 0);
                     if (_rb._velocity.y > -4)
                         _rb._velocity = new Vector2(0, -_velocity);*/
                     break;
-                case PlayerState.walkLeft:
+                case PlayerState.WalkLeft:
                     /*_rb._velocity += new Vector2(0, 0);
                     if (_rb._velocity.x > -4)
                         _rb._velocity = new Vector2(-_velocity, 0);*/
                     break;
-                case PlayerState.walkRight:
+                case PlayerState.WalkRight:
                     /*_rb._velocity = new Vector2(0, 0);
                     if (_rb._velocity.x < 4)
                         _rb._velocity += new Vector2(_velocity, 0);*/
                     break;
-                case PlayerState.punch:
+                case PlayerState.Punch:
                     break;
             }
             _currentState = _newState;
@@ -157,12 +161,12 @@ public class PlayerController : MonoBehaviour
     {
         if (on)
         {
-            _dontMove = true;
+            _automaticMove = true;
             _collider.enabled = false;
         }
         else
         {
-            _dontMove = false;
+            _automaticMove = false;
             _collider.enabled = true;
         }
     }
@@ -176,47 +180,47 @@ public class PlayerController : MonoBehaviour
 
     private void MovementUpdate()
     {
-        if (_dontMove) return;
+        if (_automaticMove) return;
 
         if (!Input.anyKey)
         {
-            _newState = PlayerState.idle;
+            _newState = PlayerState.Idle;
         }
         else
         {
             /* switch (Input.inputString)
              {
                  case "w":
-                     _newState = PlayerState.walkUp;
+                     _newState = PlayerState.WalkUp;
                      break;
                  case "s":
-                     _newState = PlayerState.walkDown;
+                     _newState = PlayerState.WalkDown;
                      break;
                  case "a":
-                     _newState = PlayerState.walkLeft;
+                     _newState = PlayerState.WalkLeft;
                      break;
                  case "d":
-                     _newState = PlayerState.walkRight;
+                     _newState = PlayerState.WalkRight;
                      break;
              }*/
             if (Input.GetKey(KeyCode.W))
             {
-                _newState = PlayerState.walkUp;
+                _newState = PlayerState.WalkUp;
                 transform.position += new Vector3(0, Velocity, 0);
             }
             if (Input.GetKey(KeyCode.S))
             {
-                _newState = PlayerState.walkDown;
+                _newState = PlayerState.WalkDown;
                 transform.position += new Vector3(0, -Velocity, 0);
             }
             if (Input.GetKey(KeyCode.A))
             {
-                _newState = PlayerState.walkLeft;
+                _newState = PlayerState.WalkLeft;
                 transform.position += new Vector3(-Velocity, 0, 0);
             }
             if (Input.GetKey(KeyCode.D))
             {
-                _newState = PlayerState.walkRight;
+                _newState = PlayerState.WalkRight;
                 transform.position += new Vector3(Velocity, 0, 0);
             }
         }
