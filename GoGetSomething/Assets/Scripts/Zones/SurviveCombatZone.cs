@@ -9,14 +9,11 @@ using MEC;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-
 public class SurviveCombatZone : CombatZone
 {
     #region Fields
 
     [TabGroup("Survive")] [SerializeField] private int _time = 30;
-    [TabGroup("Survive")] [SerializeField] private EnemySpawners[] _enemySpawners;
-//    [Space]
 
     #endregion
 
@@ -35,20 +32,6 @@ public class SurviveCombatZone : CombatZone
         yield return Timing.WaitForSeconds(1.5f);
 
         ZoneReady();
-    }
-
-    protected override void ZoneReady()
-    {
-        base.ZoneReady();
-        SpawnEnemies();
-    }
-
-    private void SpawnEnemies()
-    {
-        for (int i = 0; i < _enemySpawners.Length; i++)
-        {
-            _enemySpawners[i].Spawner.StartSpawn();
-        }
     }
 
     public override void Completed()

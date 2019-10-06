@@ -5,9 +5,11 @@
 
 using UnityEngine;
 
-public class RoundsCombatZone : MonoBehaviour
+public class RoundsCombatZone : CombatZone
 {
     #region Fields
+
+    [SerializeField] private int _rounds = 3;
 
     #endregion
 

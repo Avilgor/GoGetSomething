@@ -17,6 +17,8 @@ public class EnemySpawn : MonoBehaviour
     [SerializeField] public Vector2 SpawnTimeRate;
     [SerializeField] public EnemyType[] PossibleEnemies;
 
+    private CombatZone _combatZone;
+
     #endregion
 
     #region MonoBehaviour Functions
@@ -27,6 +29,12 @@ public class EnemySpawn : MonoBehaviour
 
     public void StartSpawn()
     {
+        Timing.RunCoroutine(_Spawn());
+    }
+
+    public void StartSpawn(CombatZone combatZone)
+    {
+        _combatZone = combatZone;
         Timing.RunCoroutine(_Spawn());
     }
 

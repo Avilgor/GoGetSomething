@@ -27,7 +27,6 @@ public class EnemySpawners
 public class CombatZone : Zone
 {
     #region Fields
-
     public enum Type
     {
         Null = -1,
@@ -35,8 +34,7 @@ public class CombatZone : Zone
     }
 
     [SerializeField] protected Type CombatType;
-//    [SerializeField] private Transform[] _weaponSpawns;
-//    [SerializeField] private Transform[] _enemiesSpawns;
+    [TabGroup("Combat")] [SerializeField] private EnemySpawners[] _enemySpawners;
 
     #endregion
 
@@ -50,6 +48,20 @@ public class CombatZone : Zone
     #endregion
 
     #region Other Functions
+
+    protected override void ZoneReady()
+    {
+        base.ZoneReady();
+        SpawnEnemies();
+    }
+
+    protected virtual void SpawnEnemies()
+    {
+        for (int i = 0; i < _enemySpawners.Length; i++)
+        {
+            _enemySpawners[i].Spawner.StartSpawn();
+        }
+    }
 
     protected virtual void Failed()
     {
