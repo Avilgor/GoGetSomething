@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using DG.Tweening;
 using MEC;
-using Unity.Collections;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Sirenix.OdinInspector;
 
 public enum ZoneType
 {

@@ -43,5 +43,4 @@ public static class Find
     }
 
     public static SettingsAsset Settings => FindAssetByType<SettingsAsset>();
-    public static EditorHelperAsset EditorHelper => FindAssetByType<EditorHelperAsset>();
 }

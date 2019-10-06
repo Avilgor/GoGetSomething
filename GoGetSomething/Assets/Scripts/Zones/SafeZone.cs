@@ -31,9 +31,10 @@ public class SafeZone : Zone
     {
     }
 
-    private void SetBonfireId()
+    public void SetBonfireId()
     {
         _bonfire.ID = IID;
     }
+
     #endregion
 }

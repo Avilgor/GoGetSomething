@@ -34,6 +34,7 @@ public class CombatZone : Zone
 
     protected virtual void Failed()
     {
+        PlayerController.I.Die();
         //TODO Reset to last saved point
     }
     #endregion

@@ -12,7 +12,7 @@ public class Bonfire : MonoBehaviour
 {
     #region Fields
 
-    [ReadOnly] [Tooltip("Change it in its 'SafeZone' Script")] public int ID;
+    [Tooltip("Change it in its 'SafeZone' Script")] public int ID;
 
     [SerializeField] private GameObject _firedGo;
     [OnValueChanged("SetBonfire")] [SerializeField] private TryToSavePopup _popup;
@@ -81,5 +81,6 @@ public class Bonfire : MonoBehaviour
         _fired = User.IsBonfireFired(ID);
         _firedGo.SetActive(_fired);
     }
+
     #endregion
 }

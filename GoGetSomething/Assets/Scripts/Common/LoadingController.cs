@@ -52,15 +52,7 @@ public class LoadingController : Singleton<LoadingController>
 
         var async = new AsyncOperation();
 
-        //Init Scene
-        if (SceneManager.GetActiveScene().name == Settings.I.Get.InitSceneName)
-        {
-            LoadLevel.SceneName = Settings.I.Get.InitSceneName;
-        }
-        else
-        {
-            async = SceneManager.LoadSceneAsync(LoadLevel.SceneName, LoadSceneMode.Single);
-        }
+        async = SceneManager.LoadSceneAsync(LoadLevel.SceneName, LoadSceneMode.Single);
 
         yield return Timing.WaitUntilDone(async);
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(LoadLevel.SceneName));

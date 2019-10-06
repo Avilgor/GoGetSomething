@@ -45,6 +45,10 @@ public class User : MonoBehaviour
     {
         var realId = "Bonfire"+bonfireId;
         var list = ObscuredPrefsX.GetStringArray("BonfireFired").ToList();
+
+        Debug.Log("Bonfire: " + bonfireId);
+        Debug.Log("list.Contains(realId): " + list.Contains(realId));
+
         return list.Contains(realId);
     }
 
@@ -77,19 +81,17 @@ public class User : MonoBehaviour
     public static void SaveProcess()
     {
         var savedList = ObscuredPrefsX.GetStringArray("ZonesCompletedSaved").ToList();
-        var queueList = ObscuredPrefsX.GetStringArray("ZonesCompletedQueue").ToList();
+        var queueList = ObscuredPrefsX.GetStringArray("ZonesCompletedQueue");
 
-        for (int i = 0; i < savedList.Count; i++)
+        for (int j = 0; j < queueList.Length; j++)
         {
-            for (int j = 0; j < queueList.Count; j++)
+            if (!savedList.Contains(queueList[j]))
             {
-                if (!savedList[i].Contains(queueList[j]))
-                {
-                    savedList.Add(queueList[j]);
-                    Debug.Log("Zone Completed Added in Saved: " + queueList[j]);
-                }
+                savedList.Add(queueList[j]);
+                Debug.Log("Zone Completed Added in Saved: " + queueList[j]);
             }
         }
+
         ObscuredPrefsX.SetStringArray("ZonesCompletedSaved", savedList.ToArray());
         Debug.Log("Process Saved");
     }

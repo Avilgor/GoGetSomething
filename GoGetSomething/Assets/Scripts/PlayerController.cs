@@ -57,7 +57,7 @@ public class PlayerController : Singleton<PlayerController>
 #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.R))
         {
-            Death();
+            Die();
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
         else if (Input.GetKeyDown(KeyCode.F)) User.Firedust++;
@@ -261,7 +261,7 @@ public class PlayerController : Singleton<PlayerController>
         }
     }
 
-    private void Death()
+    public void Die()
     {
         Debug.Log("Player Died");
         User.ClearZonesQueued();

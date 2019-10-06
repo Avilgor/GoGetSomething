@@ -47,6 +47,7 @@ public class IdsController : MonoBehaviour
         {
             SafeZone.IID = ID;
             SafeZone.ZoneType = ZoneType.Safe;
+            SafeZone.SetBonfireId();
         }
     }
 
