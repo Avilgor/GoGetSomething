@@ -27,6 +27,7 @@ public class Enemy : MonoBehaviour
     #region Fields
     [SerializeField] private NavMeshAgent _agent;
     [SerializeField] private Animator _anim;
+    [SerializeField] private int _AttackDmg;
 
     public bool _attacking;
     private bool _stop;
