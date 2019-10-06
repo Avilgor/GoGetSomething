@@ -32,7 +32,7 @@ public class Enemy : MonoBehaviour
     private GameObject _target;
     private LookPoint directionPointer;
 
-    private CombatZone _parentCombatZone;
+    [HideInInspector] public CombatZone ParentCombatZone;
 
     #endregion
 
@@ -110,7 +110,7 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
-        if(_parentCombatZone != null) _parentCombatZone.EnemyKilled(this);
+        if(ParentCombatZone != null) ParentCombatZone.EnemyKilled(this);
     }
 
     #endregion
