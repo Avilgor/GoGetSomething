@@ -8,6 +8,13 @@ using UnityEngine.SceneManagement;
 public class PlayerController : Singleton<PlayerController>
 {
     #region Fields
+    enum forwardPointer
+    {
+        back=0,
+        front,
+        left,
+        right
+    }
 
     enum PlayerState
     {
@@ -27,8 +34,10 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField] private Rigidbody2D _rb;
     [SerializeField] private BoxCollider2D _collider;
     [SerializeField] private Zone _currentZone;
+    [SerializeField] private Animator _anim;
 
     private PlayerState _currentState, _newState;
+    private forwardPointer _aimDirection;
     private bool _automaticMove;
 
     public float Velocity => _velocity * Time.deltaTime;
@@ -40,8 +49,8 @@ public class PlayerController : Singleton<PlayerController>
     void Start()
     {
 //        _currentZone.EnterInitZone();
+        _aimDirection = forwardPointer.front;
         _currentState = PlayerState.Idle;
-
         StartGame();
     }
 
@@ -140,36 +149,55 @@ public class PlayerController : Singleton<PlayerController>
     private void CheckStates()
     {
         if (_currentState != _newState)
-        {
+        {            
             switch (_newState)
             {
                 case PlayerState.Idle:
                     _rb.velocity = new Vector2(0, 0);
+                    _anim.SetBool("walk", false);
+                    _anim.SetBool("withBone", false);
                     break;
                 case PlayerState.Death:
                     gameObject.SetActive(false);
                     break;
                 case PlayerState.WalkUp:
-                    /*_rb._velocity += new Vector2(0, 0);
-                    if (_rb._velocity.y < 4)
-                        _rb._velocity = new Vector2(0, _velocity);*/
+                    _aimDirection = forwardPointer.back;
+                    _anim.SetBool("walk", true);
+                    _anim.SetBool("withBone", false);
                     break;
                 case PlayerState.WalkDown:
-                    /*_rb._velocity += new Vector2(0, 0);
-                    if (_rb._velocity.y > -4)
-                        _rb._velocity = new Vector2(0, -_velocity);*/
+                    _aimDirection = forwardPointer.front;
+                    Debug.Log(_aimDirection);
+                    _anim.SetBool("walk", true);
+                    _anim.SetBool("withBone", false);
                     break;
                 case PlayerState.WalkLeft:
-                    /*_rb._velocity += new Vector2(0, 0);
-                    if (_rb._velocity.x > -4)
-                        _rb._velocity = new Vector2(-_velocity, 0);*/
+                    _aimDirection = forwardPointer.left;
+                    _anim.SetBool("walk", true);
+                    _anim.SetBool("withBone", false);
                     break;
                 case PlayerState.WalkRight:
-                    /*_rb._velocity = new Vector2(0, 0);
-                    if (_rb._velocity.x < 4)
-                        _rb._velocity += new Vector2(_velocity, 0);*/
+                    _aimDirection = forwardPointer.right;
+                    _anim.SetBool("walk", true);
+                    _anim.SetBool("withBone", false);
                     break;
                 case PlayerState.Punch:
+                    break;
+            }
+
+            switch (_aimDirection)
+            {
+                case forwardPointer.back:
+                    _anim.SetFloat("Blend", 0.66f);
+                    break;
+                case forwardPointer.front:
+                    _anim.SetFloat("Blend", 0f);
+                    break;
+                case forwardPointer.right:
+                    _anim.SetFloat("Blend", 0.33f);
+                    break;
+                case forwardPointer.left:
+                    _anim.SetFloat("Blend", 1f);
                     break;
             }
             _currentState = _newState;
@@ -223,21 +251,6 @@ public class PlayerController : Singleton<PlayerController>
         }
         else
         {
-            /* switch (Input.inputString)
-             {
-                 case "w":
-                     _newState = PlayerState.WalkUp;
-                     break;
-                 case "s":
-                     _newState = PlayerState.WalkDown;
-                     break;
-                 case "a":
-                     _newState = PlayerState.WalkLeft;
-                     break;
-                 case "d":
-                     _newState = PlayerState.WalkRight;
-                     break;
-             }*/
             if (Input.GetKey(KeyCode.W))
             {
                 _newState = PlayerState.WalkUp;
