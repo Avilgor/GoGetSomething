@@ -524,7 +524,7 @@ public class PlayerController : Singleton<PlayerController>
                     transform.position += new Vector3(Velocity, 0, 0);
                 }
             }
-            if (Input.GetKey(KeyCode.Space) && Input.GetMouseButton(0) && !_attacking)
+            if ((Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0)) && !_attacking)
             {
                 _newState = PlayerState.Attack;
                 _attacking = true;
