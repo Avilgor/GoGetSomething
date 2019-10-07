@@ -82,7 +82,7 @@ public class CombatZone : Zone
 
         for (int i = 0; i < EnemySpawners.Length; i++)
         {
-            EnemySpawners[i].Spawner.StartSpawn();
+            if(EnemySpawners[i].Spawner != null) EnemySpawners[i].Spawner.StartSpawn();
         }
     }
 

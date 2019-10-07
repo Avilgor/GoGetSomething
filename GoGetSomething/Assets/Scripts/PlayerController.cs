@@ -1,5 +1,7 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using DG.Tweening;
+using MEC;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
@@ -24,7 +26,7 @@ public class PlayerController : Singleton<PlayerController>
         porra
     }
 
-    enum PlayerState
+    public enum PlayerState
     {
         Idle = 0,
         Death,
@@ -98,6 +100,16 @@ public class PlayerController : Singleton<PlayerController>
         {
             _essences = value;
             _essencesText.text = value.ToString();
+        }
+    }
+
+    public PlayerState NewState
+    {
+        get { return _newState; }
+        set
+        {
+            Timing.KillCoroutines("StopAttacking");
+            _newState = value;
         }
     }
 
@@ -237,7 +249,7 @@ public class PlayerController : Singleton<PlayerController>
         if (col.gameObject.CompareTag("Enemy"))
         {
             Hit(col.gameObject.GetComponentInParent<Enemy>().AttackDamage);
-            _newState = PlayerState.damaged;
+            NewState = PlayerState.damaged;
             //           kick = transform.position - col.gameObject.transform.position;
             //           kick.Normalize();
         }
@@ -276,10 +288,10 @@ public class PlayerController : Singleton<PlayerController>
 
     private void CheckStates()
     {
-        if (_currentState != _newState || _forceCheck)
+        if (_currentState != NewState || _forceCheck)
         {
             Debug.Log(_currentState);
-            switch (_newState)
+            switch (NewState)
             {              
                 case PlayerState.Idle:
                     _rb.velocity = new Vector2(0, 0);
@@ -444,7 +456,7 @@ public class PlayerController : Singleton<PlayerController>
                     _anim.SetFloat("Blend", 1f);
                     break;
             }
-            _currentState = _newState;
+            _currentState = NewState;
             _forceCheck = false;
         }
     }
@@ -497,7 +509,7 @@ public class PlayerController : Singleton<PlayerController>
 
         if (!Input.anyKey)
         {
-            _newState = PlayerState.Idle;
+            NewState = PlayerState.Idle;
         }
         else
         {
@@ -505,28 +517,30 @@ public class PlayerController : Singleton<PlayerController>
             {               
                 if (Input.GetKey(KeyCode.W))
                 {
-                    _newState = PlayerState.WalkUp;
+                    NewState = PlayerState.WalkUp;
                     transform.position += new Vector3(0, Velocity, 0);
                 }
                 if (Input.GetKey(KeyCode.S))
                 {
-                    _newState = PlayerState.WalkDown;
+                    NewState = PlayerState.WalkDown;
                     transform.position += new Vector3(0, -Velocity, 0);
                 }
                 if (Input.GetKey(KeyCode.A))
                 {
-                    _newState = PlayerState.WalkLeft;
+                    NewState = PlayerState.WalkLeft;
                     transform.position += new Vector3(-Velocity, 0, 0);
                 }
                 if (Input.GetKey(KeyCode.D))
                 {
-                    _newState = PlayerState.WalkRight;
+                    NewState = PlayerState.WalkRight;
                     transform.position += new Vector3(Velocity, 0, 0);
                 }
-                if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButton(0))&& _currentState!= PlayerState.Attack)
+                if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButton(0)) && _currentState!= PlayerState.Attack)
                 {
-                    _newState = PlayerState.Attack;
+                    NewState = PlayerState.Attack;
                     _attacking = true;
+
+                    Timing.RunCoroutine(_StopAttacking(), "StopAttacking");
                 }
             }            
         }
@@ -535,6 +549,12 @@ public class PlayerController : Singleton<PlayerController>
         {
             Application.Quit();
         }
+    }
+
+    private IEnumerator<float> _StopAttacking()
+    {
+        yield return Timing.WaitForSeconds(1);
+        NewState = PlayerState.Idle;
     }
 
     private void Hit(int damage)
