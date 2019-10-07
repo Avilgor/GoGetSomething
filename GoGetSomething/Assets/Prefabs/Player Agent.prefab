@@ -742,7 +742,6 @@ GameObject:
   - component: {fileID: 8272544359122013229}
   - component: {fileID: 131903616}
   - component: {fileID: 131903618}
-  - component: {fileID: 2108374998}
   - component: {fileID: 4367970769048106166}
   m_Layer: 0
   m_Name: Player Agent
@@ -781,7 +780,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cbc83b3bd6aa83b43acbfbf5525d5423, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 100
+  _maxHealth: 100
   _initDamage: 10
   _clubDamageMultiplier: 2
   _porraDamageMultiplier: 3.5
@@ -790,7 +789,10 @@ MonoBehaviour:
   _extraSpeedPerEssence: 0.1
   _clubSpeedMultiplier: 0.8
   _porraSpeedMultiplier: 0.5
-  _velocity: 6
+  _healthImg: {fileID: 0}
+  _parent: {fileID: 0}
+  _essencesText: {fileID: 0}
+  _velocity: 4
   _rb: {fileID: 131903616}
   _collider: {fileID: 131903618}
   _currentZone: {fileID: 0}
@@ -803,9 +805,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 270e7a2209ae41b4db778256fb422577, type: 3}
   - {fileID: 8300000, guid: 4d721bfdfef7c0544a350278175dda20, type: 3}
   - {fileID: 8300000, guid: 49fad8e86122bc3448661a93bd02e8c7, type: 3}
+  - {fileID: 8300000, guid: dcc524b97162ab147b83e72da492daec, type: 3}
   _aimDirection: 0
   _attacking: 0
-  _gotDamaged: 0
 --- !u!195 &8272544359122013229
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -875,55 +877,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.5, y: 0.5}
   m_EdgeRadius: 0
---- !u!212 &2108374998
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8272544359122013393}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
 --- !u!82 &4367970769048106166
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1070,7 +1023,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1090,7 +1043,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_Sprite: {fileID: 7644736921307691382, guid: 0fd65411df6809148a0aa7c2fb77e15f,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
