@@ -574,6 +574,7 @@ public class PlayerController : Singleton<PlayerController>
         EventManager.OnResetAll();
         _spriteRender.SetActive(true);
         _isDeath = false;
+        GetComponent<AudioSource>().PlayOneShot(_soundEffects[4]);
     }
 
     private void EnemyDied()
@@ -585,7 +586,7 @@ public class PlayerController : Singleton<PlayerController>
     {
         _weaponEquiped = weapon.nude;
         Essences = 0;
-        CurrentHealth = _maxHealth;
+        CurrentHealth = _maxHealth;        
     }
 
     #endregion
