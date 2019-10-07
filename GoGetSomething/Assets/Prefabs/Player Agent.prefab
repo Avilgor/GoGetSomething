@@ -782,6 +782,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 100
+  _initDamage: 10
+  _clubDamageMultiplier: 2
+  _porraDamageMultiplier: 3.5
+  _essences: 0
+  _extraDamagePerEssence: 3
+  _extraSpeedPerEssence: 0.1
+  _clubSpeedMultiplier: 0.8
+  _porraSpeedMultiplier: 0.5
   _velocity: 6
   _rb: {fileID: 131903616}
   _collider: {fileID: 131903618}
@@ -789,6 +797,7 @@ MonoBehaviour:
   _anim: {fileID: 1259585561}
   _DieParticles: {fileID: 6647556339518489368, guid: 32d3327623391c040b4ccbbf5fb0101e,
     type: 3}
+  _spriteRender: {fileID: 8272544359642952444}
   _soundEffects:
   - {fileID: 8300000, guid: 1db10f7d5bb6f454cb26fd2d4a0b200f, type: 3}
   - {fileID: 8300000, guid: 270e7a2209ae41b4db778256fb422577, type: 3}

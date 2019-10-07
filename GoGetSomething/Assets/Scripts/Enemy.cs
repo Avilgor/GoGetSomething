@@ -3,6 +3,7 @@
  * Created by Akeru on 06/10/2019
  */
 
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -26,7 +27,7 @@ public class Enemy : MonoBehaviour
     #region Fields
     [SerializeField] private NavMeshAgent _agent;
     [SerializeField] private Animator _anim;
-    [SerializeField] private GameObject _deathParticles,_deathDrop;
+    [SerializeField] private GameObject _deathParticles,_deathDrop,_spriteRenderer;
     [SerializeField] public AudioClip _deathSound,_attackSound;
     [SerializeField] private int _attackDmg;
     [SerializeField] private int _health;
@@ -43,6 +44,8 @@ public class Enemy : MonoBehaviour
 
     [HideInInspector] public CombatZone ParentCombatZone;
 
+    private SpawnDamageText _spawnDamage;
+
     #endregion
 
     #region MonoBehaviour Functions
@@ -51,6 +54,8 @@ public class Enemy : MonoBehaviour
         InitSetup();
         directionPointer = LookPoint.downRight;
         _attacking = false;
+
+        _spawnDamage = transform.GetChild(0).GetComponent<SpawnDamageText>();
     }
 
     private void Update()
@@ -138,7 +143,7 @@ public class Enemy : MonoBehaviour
 
         _death = true;
 
-        transform.GetChild(0).gameObject.SetActive(false);
+        transform.GetChild(1).gameObject.SetActive(false);
         Destroy(gameObject, 2);
     }
 
@@ -159,9 +164,18 @@ public class Enemy : MonoBehaviour
     private void Hit(int dmg)
     {
         if (_death) return;
+        _spawnDamage.SpawnText(dmg);
         _health -= dmg;
         Debug.Log("<color=yellow>Hit for </color><color=white>"+ dmg + " (" + _health + ")</color><color=yellow> damage</color>");
-        if(_health <= 0) Die();
+        _spriteRenderer.GetComponent<SpriteRenderer>().color = Color.white;       
+        if (_health <= 0) Die();
+        else StartCoroutine(turnColorWhite(0.2f));
+    }
+
+    IEnumerator turnColorWhite(float time)
+    {
+        yield return new WaitForSeconds(time);
+        _spriteRenderer.GetComponent<SpriteRenderer>().color = Color.red;
     }
 
     #endregion

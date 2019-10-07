@@ -75,5 +75,15 @@ PrefabInstance:
       propertyPath: _health
       value: 400
       objectReference: {fileID: 0}
+    - target: {fileID: 5094546156696567600, guid: e0a8643b0642e3049988c3e04b2b87f3,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5094546156696567600, guid: e0a8643b0642e3049988c3e04b2b87f3,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e0a8643b0642e3049988c3e04b2b87f3, type: 3}

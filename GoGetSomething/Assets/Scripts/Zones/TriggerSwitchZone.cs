@@ -28,10 +28,13 @@ public class TriggerSwitchZone : MonoBehaviour
         if(_toZone == currentZone) return;
         
         if(currentZone.ID != null) currentZone.Exit();
-        if (User.IsZoneCompleted(_toZone.ID)) return;
+        if (User.IsZoneCompleted(_toZone.ID))
+        {
+            Debug.Log("Zone ["+_toZone.ID+"] Completed");
+            return;
+        }
 
         _toZone.Enter();
-//        player.ChangeZone(_toZone);
         _switch.Switch(player, _isRed);
     }
     #endregion

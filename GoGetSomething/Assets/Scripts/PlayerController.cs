@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using DG.Tweening;
 using Sirenix.OdinInspector;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : Singleton<PlayerController>
 {
@@ -35,7 +37,7 @@ public class PlayerController : Singleton<PlayerController>
     }
 
     [Title("Player variables")]
-    [SerializeField] private int _health = 100;
+    [SerializeField] private int _maxHealth = 100;
     [SerializeField] private int _initDamage = 10;
     [SerializeField] private float _clubDamageMultiplier = 2;
     [SerializeField] private float _porraDamageMultiplier = 3.5f;
@@ -45,11 +47,14 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField] private float _clubSpeedMultiplier = 0.8f;
     [SerializeField] private float _porraSpeedMultiplier = 0.5f;
 
+    [SerializeField] private Image _healthImg;
+    [SerializeField] private RectTransform _parent;
+    [SerializeField] private TextMeshProUGUI _essencesText;
 
-    private int _currentHealth;
+    private float _currentHealth;
 
-    public float Damage => (_initDamage + (_essences * _extraDamagePerEssence)) * WeaponMultiplier;
-    public float Velocity => (_velocity + (_essences * _extraSpeedPerEssence)) * SpeedWeaponMultiplier * Time.deltaTime;
+    public float Damage => (_initDamage + (Essences * _extraDamagePerEssence)) * WeaponMultiplier;
+    public float Velocity => (_velocity + (Essences * _extraSpeedPerEssence)) * SpeedWeaponMultiplier * Time.deltaTime;
 
     public float WeaponMultiplier
     {
@@ -73,6 +78,29 @@ public class PlayerController : Singleton<PlayerController>
         }
     }
 
+    public float CurrentHealth
+    {
+        get { return _currentHealth; }
+        set
+        {
+            _currentHealth = value;
+            DOTween.Kill("PlayerHealth");
+            Debug.Log(_currentHealth +" "+(1/(float)_maxHealth));
+            _parent.DOShakePosition(0.15f, Vector3.one * 0.1f, 5, 90, false);
+            _healthImg.DOFillAmount(1 / (float)_maxHealth * _currentHealth, 0.1f).SetEase(Ease.OutSine).SetId("PlayerHealth");
+        }
+    }
+
+    public int Essences
+    {
+        get { return _essences; }
+        set
+        {
+            _essences = value;
+            _essencesText.text = value.ToString();
+        }
+    }
+
 
     [Title("Setup")] [SerializeField] private float _velocity = 0.08f;
 
@@ -80,7 +108,7 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField] private BoxCollider2D _collider;
     [SerializeField] private Zone _currentZone;
     [SerializeField] private Animator _anim;
-    [SerializeField] private GameObject _DieParticles;
+    [SerializeField] private GameObject _DieParticles,_spriteRender;
     [SerializeField] public AudioClip[] _soundEffects;
 
     private PlayerState _currentState, _newState;
@@ -89,7 +117,7 @@ public class PlayerController : Singleton<PlayerController>
     private int _essencePower;
     private bool _automaticMove,_forceCheck;
     private Vector2 kick = new Vector2(0,0);
-    public bool _attacking,_gotDamaged;
+    public bool _attacking;
 
 //    public float Velocity => _velocity * Time.deltaTime;
 
@@ -107,8 +135,7 @@ public class PlayerController : Singleton<PlayerController>
         _weaponEquiped = weapon.nude;
         _attacking = false;
         _forceCheck = false;
-        _gotDamaged = false;
-        _currentHealth = _health;
+        CurrentHealth = _maxHealth;
         StartGame();
     }
 
@@ -218,7 +245,7 @@ public class PlayerController : Singleton<PlayerController>
             _essencePower++;
             Debug.Log("Essence collected");
             EventManager.OnEssenceCollect();
-            _essences++;
+            Essences++;
             Destroy(col.gameObject);
         }
     }
@@ -250,8 +277,9 @@ public class PlayerController : Singleton<PlayerController>
     {
         if (_currentState != _newState || _forceCheck)
         {
+            Debug.Log(_currentState);
             switch (_newState)
-            {
+            {              
                 case PlayerState.Idle:
                     _rb.velocity = new Vector2(0, 0);
                     switch (_weaponEquiped)
@@ -376,27 +404,27 @@ public class PlayerController : Singleton<PlayerController>
                     _anim.SetTrigger("attack");
                     break;
                 case PlayerState.damaged:
-                    /*                    _gotDamaged = true;
-                                        StartCoroutine(wait(0.8f));
-                                        switch (_aimDirection)
-                                        {
-                                            case forwardPointer.back:
-                                                kick = new Vector2(0, 40);
-                                                break;
-                                            case forwardPointer.front:
-                                                kick = new Vector2(0, -40);
-                                                break;
-                                            case forwardPointer.right:
-                                                kick = new Vector2(40, 0);
+        /*                    _gotDamaged = true;
+                            StartCoroutine(wait(0.8f));
+                            switch (_aimDirection)
+                            {
+                                case forwardPointer.back:
+                                    kick = new Vector2(0, 40);
+                                    break;
+                                case forwardPointer.front:
+                                    kick = new Vector2(0, -40);
+                                    break;
+                                case forwardPointer.right:
+                                    kick = new Vector2(40, 0);
 
-                                                break;
-                                            case forwardPointer.left:
-                                                kick = new Vector2(-40, 0);
-                                                break;
-                                        }
-                                        _rb.AddForce(-kick*500);
-                                        _DieParticles
-                    */
+                                    break;
+                                case forwardPointer.left:
+                                    kick = new Vector2(-40, 0);
+                                    break;
+                            }
+                            _rb.AddForce(-kick*500);
+                            _DieParticles
+        */
                     GetComponent<AudioSource>().PlayOneShot(_soundEffects[0]);
                     break;
             }
@@ -429,6 +457,7 @@ public class PlayerController : Singleton<PlayerController>
     private void ZoneReady()
     {
         AutomaticMovement(false);
+        CleanCharacter();
     }
 
     public void MoveTo(Vector2 position, float time)
@@ -472,8 +501,8 @@ public class PlayerController : Singleton<PlayerController>
         }
         else
         {
-            if (!_attacking && !_gotDamaged)
-            {
+            if (!_attacking)
+            {               
                 if (Input.GetKey(KeyCode.W))
                 {
                     _newState = PlayerState.WalkUp;
@@ -494,26 +523,29 @@ public class PlayerController : Singleton<PlayerController>
                     _newState = PlayerState.WalkRight;
                     transform.position += new Vector3(Velocity, 0, 0);
                 }
-            }
-            if (Input.GetKey(KeyCode.Space))
-            {
-                _newState = PlayerState.Attack;
-                _attacking = true;
-            }
+                if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButton(0))&& _currentState!= PlayerState.Attack)
+                {
+                    _newState = PlayerState.Attack;
+                    _attacking = true;
+                }
+            }            
         }
     }
 
     private void Hit(int damage)
     {
-        _health -= damage;
-        Debug.Log("<color=red>Hit for </color><color=white>" + damage + " ("+_health+")</color><color=red> damage</color>");
+        _spriteRender.GetComponent<SpriteRenderer>().color = Color.red;
+        CurrentHealth -= damage;
+        Debug.Log("<color=red>Hit for </color><color=white>" + damage + " ("+ CurrentHealth + ")</color><color=red> damage</color>");
 
-        if(_health <= 0) Die();
+        if(CurrentHealth <= 0) Die();
+        else StartCoroutine(turnColorWhite(0.2f));
     }
 
     public void Die()
     {
         Debug.Log("Player Died");
+        _DieParticles.GetComponent<ParticleSystem>().Play();
         User.ClearZonesQueued();
         EventManager.OnResetAll();
     }
@@ -523,15 +555,22 @@ public class PlayerController : Singleton<PlayerController>
         if (User.LastSavedPlayerPosition() != Vector2.zero) transform.position = User.LastSavedPlayerPosition();
     }
 
-    IEnumerator wait(float time)
+    IEnumerator turnColorWhite(float time)
     {
         yield return new WaitForSeconds(time);
-        _gotDamaged = false;
+        _spriteRender.GetComponent<SpriteRenderer>().color = Color.white;
     }
 
     private void EnemyDied()
     {
-        _essences++;
+        Essences++;
+    }
+
+    private void CleanCharacter()
+    {
+        _weaponEquiped = weapon.nude;
+        Essences = 0;
+        CurrentHealth = _maxHealth;
     }
 
     #endregion
