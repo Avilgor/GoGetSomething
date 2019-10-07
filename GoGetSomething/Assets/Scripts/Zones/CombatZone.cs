@@ -35,6 +35,7 @@ public class CombatZone : Zone
 
     [TabGroup("Combat")] [OnValueChanged("SetName")] [SerializeField] protected Type CombatType;
     [TabGroup("Combat")] [SerializeField] protected EnemySpawners[] EnemySpawners;
+    [OnValueChanged("SetSpawnsToRounds")] [TabGroup("Combat")] [SerializeField] private EnemySpawn[] _roundsSpawns;
 
     #endregion
 
@@ -48,6 +49,22 @@ public class CombatZone : Zone
     #endregion
 
     #region Other Functions
+
+
+    [Button("Create Rounds")]
+    private void SetSpawnsToRounds()
+    {
+        EnemySpawners = new EnemySpawners[_roundsSpawns.Length];
+    }
+
+    [Button("Assign")]
+    private void Assign()
+    {
+        for (int i = 0; i < _roundsSpawns.Length; i++)
+        {
+            EnemySpawners[i].Spawner = _roundsSpawns[i];
+        }
+    }
 
     protected override void ZoneReady()
     {

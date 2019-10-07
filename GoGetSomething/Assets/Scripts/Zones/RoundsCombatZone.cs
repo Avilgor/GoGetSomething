@@ -17,7 +17,14 @@ public class RoundsCombatZone : CombatZone
         public EnemySpawners[] Spawners;
     }
 
+    [Serializable]
+    public struct SimpleRoundData
+    {
+        public EnemySpawn[] Spawns;
+    }
+
     [TabGroup("Rounds")] [SerializeField] private RoundData[] _rounds;
+    [OnValueChanged("SetSpawnsToRounds")] [TabGroup("Rounds")] [SerializeField] private SimpleRoundData[] _roundsSpawns;
 
     private int _roundCount;
     private int _enemiesDied;
@@ -32,6 +39,28 @@ public class RoundsCombatZone : CombatZone
 
     protected override void SpawnEnemies()
     {
+    }
+
+    [Button("Create Rounds")]
+    private void SetSpawnsToRounds()
+    {
+        _rounds = new RoundData[_roundsSpawns.Length];
+        for (int i = 0; i < _roundsSpawns.Length; i++)
+        {
+            _rounds[i].Spawners = new EnemySpawners[_roundsSpawns[i].Spawns.Length];
+        }
+    }
+
+    [Button("Assign")]
+    private void Assign()
+    {
+        for (int i = 0; i < _roundsSpawns.Length; i++)
+        {
+            for (int j = 0; j < _roundsSpawns[i].Spawns.Length; j++)
+            {
+                _rounds[i].Spawners[j].Spawner = _roundsSpawns[i].Spawns[j];
+            }
+        }
     }
 
     protected override void ZoneReady()
