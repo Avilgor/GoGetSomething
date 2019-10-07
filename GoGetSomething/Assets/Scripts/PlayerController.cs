@@ -117,7 +117,7 @@ public class PlayerController : Singleton<PlayerController>
     private int _essencePower;
     private bool _automaticMove,_forceCheck;
     private Vector2 kick = new Vector2(0,0);
-    public bool _attacking,_gotDamaged;
+    public bool _attacking;
 
 //    public float Velocity => _velocity * Time.deltaTime;
 
@@ -135,7 +135,6 @@ public class PlayerController : Singleton<PlayerController>
         _weaponEquiped = weapon.nude;
         _attacking = false;
         _forceCheck = false;
-        _gotDamaged = false;
         CurrentHealth = _maxHealth;
         StartGame();
     }
@@ -278,8 +277,9 @@ public class PlayerController : Singleton<PlayerController>
     {
         if (_currentState != _newState || _forceCheck)
         {
+            Debug.Log(_currentState);
             switch (_newState)
-            {
+            {              
                 case PlayerState.Idle:
                     _rb.velocity = new Vector2(0, 0);
                     switch (_weaponEquiped)
@@ -501,8 +501,8 @@ public class PlayerController : Singleton<PlayerController>
         }
         else
         {
-            if (!_attacking && !_gotDamaged)
-            {
+            if (!_attacking)
+            {               
                 if (Input.GetKey(KeyCode.W))
                 {
                     _newState = PlayerState.WalkUp;
@@ -523,7 +523,7 @@ public class PlayerController : Singleton<PlayerController>
                     _newState = PlayerState.WalkRight;
                     transform.position += new Vector3(Velocity, 0, 0);
                 }
-                if ((Input.GetKey(KeyCode.Space) || Input.GetMouseButton(0)))
+                if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButton(0))&& _currentState!= PlayerState.Attack)
                 {
                     _newState = PlayerState.Attack;
                     _attacking = true;
@@ -553,12 +553,6 @@ public class PlayerController : Singleton<PlayerController>
     private void StartGame()
     {
         if (User.LastSavedPlayerPosition() != Vector2.zero) transform.position = User.LastSavedPlayerPosition();
-    }
-
-    IEnumerator wait(float time)
-    {
-        yield return new WaitForSeconds(time);
-        _gotDamaged = false;
     }
 
     IEnumerator turnColorWhite(float time)
