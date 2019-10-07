@@ -23,6 +23,7 @@ public class DestroyCombatZone : CombatZone
     private void Start()
     {
         _skulls = _skullsToDestroy.ToList();
+        for (int i = 0; i < _skulls.Count; i++) _skulls[i].gameObject.SetActive(false);
     }
     #endregion
 
@@ -39,6 +40,7 @@ public class DestroyCombatZone : CombatZone
     protected override void ZoneReady()
     {
         base.ZoneReady();
+        for (int i = 0; i < _skulls.Count; i++) _skulls[i].gameObject.SetActive(true);
         EventManager.OnStartSkullZone();
         EventManager.OnSkullsUpdate(_skulls.Count);
     }

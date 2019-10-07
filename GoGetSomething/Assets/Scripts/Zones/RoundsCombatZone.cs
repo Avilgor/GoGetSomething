@@ -24,7 +24,7 @@ public class RoundsCombatZone : CombatZone
     }
 
     [TabGroup("Rounds")] [SerializeField] private RoundData[] _rounds;
-    [OnValueChanged("SetSpawnsToRounds")] [TabGroup("Rounds")] [SerializeField] private SimpleRoundData[] _roundsSpawns;
+    [TabGroup("Rounds")] [SerializeField] private SimpleRoundData[] _roundsSpawns;
 
     private int _roundCount;
     private int _enemiesDied;
@@ -39,6 +39,10 @@ public class RoundsCombatZone : CombatZone
 
     protected override void SpawnEnemies()
     {
+        for (int i = 0; i < WeaponsSpawns.Length; i++)
+        {
+            WeaponsSpawns[i].StartSpawn();
+        }
     }
 
     [Button("Create Rounds")]

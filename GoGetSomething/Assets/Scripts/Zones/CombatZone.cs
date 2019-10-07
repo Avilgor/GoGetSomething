@@ -34,6 +34,7 @@ public class CombatZone : Zone
     }
 
     [TabGroup("Combat")] [OnValueChanged("SetName")] [SerializeField] protected Type CombatType;
+    [TabGroup("Combat")] [SerializeField] protected WeaponSpawn[] WeaponsSpawns;
     [TabGroup("Combat")] [SerializeField] protected EnemySpawners[] EnemySpawners;
     [OnValueChanged("SetSpawnsToRounds")] [TabGroup("Combat")] [SerializeField] private EnemySpawn[] _roundsSpawns;
 
@@ -74,6 +75,11 @@ public class CombatZone : Zone
 
     protected virtual void SpawnEnemies()
     {
+        for (int i = 0; i < WeaponsSpawns.Length; i++)
+        {
+            WeaponsSpawns[i].StartSpawn();
+        }
+
         for (int i = 0; i < EnemySpawners.Length; i++)
         {
             EnemySpawners[i].Spawner.StartSpawn();

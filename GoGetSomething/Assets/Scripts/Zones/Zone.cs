@@ -42,10 +42,7 @@ public class Zone : MonoBehaviour
         if (ZoneType == ZoneType.Combat) CloseSwitches();
         ShowZone();
 
-        Debug.Log("?");
-
         Timing.RunCoroutine(_PrepareZone());
-        Debug.Log("2?");
     }
 
     public virtual void Exit()
