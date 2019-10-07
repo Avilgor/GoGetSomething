@@ -80,7 +80,7 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField] private BoxCollider2D _collider;
     [SerializeField] private Zone _currentZone;
     [SerializeField] private Animator _anim;
-    [SerializeField] private GameObject _DieParticles;
+    [SerializeField] private GameObject _DieParticles,_spriteRender;
     [SerializeField] public AudioClip[] _soundEffects;
 
     private PlayerState _currentState, _newState;
@@ -376,27 +376,27 @@ public class PlayerController : Singleton<PlayerController>
                     _anim.SetTrigger("attack");
                     break;
                 case PlayerState.damaged:
-                    /*                    _gotDamaged = true;
-                                        StartCoroutine(wait(0.8f));
-                                        switch (_aimDirection)
-                                        {
-                                            case forwardPointer.back:
-                                                kick = new Vector2(0, 40);
-                                                break;
-                                            case forwardPointer.front:
-                                                kick = new Vector2(0, -40);
-                                                break;
-                                            case forwardPointer.right:
-                                                kick = new Vector2(40, 0);
+        /*                    _gotDamaged = true;
+                            StartCoroutine(wait(0.8f));
+                            switch (_aimDirection)
+                            {
+                                case forwardPointer.back:
+                                    kick = new Vector2(0, 40);
+                                    break;
+                                case forwardPointer.front:
+                                    kick = new Vector2(0, -40);
+                                    break;
+                                case forwardPointer.right:
+                                    kick = new Vector2(40, 0);
 
-                                                break;
-                                            case forwardPointer.left:
-                                                kick = new Vector2(-40, 0);
-                                                break;
-                                        }
-                                        _rb.AddForce(-kick*500);
-                                        _DieParticles
-                    */
+                                    break;
+                                case forwardPointer.left:
+                                    kick = new Vector2(-40, 0);
+                                    break;
+                            }
+                            _rb.AddForce(-kick*500);
+                            _DieParticles
+        */
                     GetComponent<AudioSource>().PlayOneShot(_soundEffects[0]);
                     break;
             }
@@ -495,7 +495,7 @@ public class PlayerController : Singleton<PlayerController>
                     transform.position += new Vector3(Velocity, 0, 0);
                 }
             }
-            if (Input.GetKey(KeyCode.Space))
+            if (Input.GetKey(KeyCode.Space) && !_attacking)
             {
                 _newState = PlayerState.Attack;
                 _attacking = true;
@@ -507,7 +507,7 @@ public class PlayerController : Singleton<PlayerController>
     {
         _health -= damage;
         Debug.Log("<color=red>Hit for </color><color=white>" + damage + " ("+_health+")</color><color=red> damage</color>");
-        gameObject.GetComponentInChildren<SpriteRenderer>().color = Color.red;
+        _spriteRender.GetComponent<SpriteRenderer>().color = Color.red;
 
         if (_health <= 0) Die();
         else StartCoroutine(turnColorWhite(0.2f));
@@ -516,6 +516,7 @@ public class PlayerController : Singleton<PlayerController>
     public void Die()
     {
         Debug.Log("Player Died");
+        _DieParticles.GetComponent<ParticleSystem>().Play();
         User.ClearZonesQueued();
         EventManager.OnResetAll();
     }
@@ -534,7 +535,7 @@ public class PlayerController : Singleton<PlayerController>
     IEnumerator turnColorWhite(float time)
     {
         yield return new WaitForSeconds(time);
-        gameObject.GetComponentInChildren<SpriteRenderer>().color = Color.white;
+        _spriteRender.GetComponent<SpriteRenderer>().color = Color.white;
     }
 
     private void EnemyDied()
