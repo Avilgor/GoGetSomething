@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2316896393234195820}
   - component: {fileID: 371677590321265332}
   - component: {fileID: 867185082104887316}
+  - component: {fileID: 1011908370088349775}
   m_Layer: 0
   m_Name: DeathEssence
   m_TagString: DeathEssence
@@ -70,8 +71,9 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 3
-  m_Sprite: {fileID: 21300000, guid: b3907fe4f0bc37d4f97870b16afb644b, type: 3}
-  m_Color: {r: 0.8113208, g: 0.011480933, b: 0.7246522, a: 1}
+  m_Sprite: {fileID: -1999626521270423069, guid: 263c787f7f26f04468f8414fc3417999,
+    type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -107,3 +109,22 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!95 &1011908370088349775
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5096070722829313400}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 3b5c27ed7a99d2548bed1c3cf2131cf4, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
