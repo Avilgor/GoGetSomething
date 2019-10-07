@@ -145,9 +145,11 @@ public class UIController : MonoBehaviour
 
     private void RoundUpdate(int value, int value2)
     {
+        Debug.Log("Round: "+value +" Total: "+value2);
         _currentRoundText.text = "";
+        _totalRoundsText.text = "";
         for (int i = 0; i < value; i++) _currentRoundText.text += "/";
-        for (int i = 0; i < value2; i++) _totalRoundsText.text += "o";
+        for (int i = 0; i < value2; i++) _totalRoundsText.text += "O";
     }
 
     private void StartRoundZone()
@@ -175,6 +177,8 @@ public class UIController : MonoBehaviour
 
     private void SetOffAll()
     {
+        _currentRoundText.text = "";
+        _totalRoundsText.text = "";
         _topBarCg.alpha = 0;
         _timingCg.alpha = 0;
         _roundsCg.alpha = 0;
