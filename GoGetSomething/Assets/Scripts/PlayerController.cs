@@ -46,6 +46,7 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField] private Zone _currentZone;
     [SerializeField] private Animator _anim;
     [SerializeField] private GameObject _DieParticles;
+    [SerializeField] public AudioClip[] _soundEffects;
 
     private PlayerState _currentState, _newState;
     public forwardPointer _aimDirection;
@@ -165,6 +166,7 @@ public class PlayerController : Singleton<PlayerController>
         if (col.gameObject.CompareTag("DeathEssence"))
         {
             _essencePower++;
+            Debug.Log("Essence collected");
             Destroy(col.gameObject);
         }
     }
@@ -344,6 +346,7 @@ public class PlayerController : Singleton<PlayerController>
                                         _DieParticles
                     */
                     _DieParticles.GetComponent<ParticleSystem>().Play();
+                    GetComponent<AudioSource>().PlayOneShot(_soundEffects[0]);
                     Instantiate(_DieParticles, transform.position, Quaternion.identity);
                     gameObject.SetActive(false);
                     break;

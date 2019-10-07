@@ -29,6 +29,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private Animator _anim;
     [SerializeField] private GameObject _deathParticles,_deathDrop;
     [SerializeField] private int _AttackDmg;
+    [SerializeField] public AudioClip _deathSound,_attackSound;
 
     public bool _attacking;
     private bool _stop;
@@ -127,7 +128,8 @@ public class Enemy : MonoBehaviour
         if (col.gameObject.CompareTag("PlayerWeap"))
         {
             Instantiate(_deathParticles, transform.position, Quaternion.identity);
-            Instantiate(_deathDrop, transform.position, Quaternion.identity); 
+            Instantiate(_deathDrop, transform.position, Quaternion.identity);
+            GetComponent<AudioSource>().PlayOneShot(_deathSound);
             Destroy(gameObject);
         }
     }
