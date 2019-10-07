@@ -507,8 +507,9 @@ public class PlayerController : Singleton<PlayerController>
     {
         _health -= damage;
         Debug.Log("<color=red>Hit for </color><color=white>" + damage + " ("+_health+")</color><color=red> damage</color>");
-
-        if(_health <= 0) Die();
+        gameObject.GetComponentInChildren<SpriteRenderer>().color = Color.red;
+        if (_health <= 0) Die();
+        StartCoroutine(turnColorWhite(0.5f));
     }
 
     public void Die()
@@ -527,6 +528,12 @@ public class PlayerController : Singleton<PlayerController>
     {
         yield return new WaitForSeconds(time);
         _gotDamaged = false;
+    }
+
+    IEnumerator turnColorWhite(float time)
+    {
+        yield return new WaitForSeconds(time);
+        gameObject.GetComponentInChildren<SpriteRenderer>().color = Color.white;
     }
 
     private void EnemyDied()

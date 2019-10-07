@@ -3,6 +3,7 @@
  * Created by Akeru on 06/10/2019
  */
 
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -161,7 +162,15 @@ public class Enemy : MonoBehaviour
         if (_death) return;
         _health -= dmg;
         Debug.Log("<color=yellow>Hit for </color><color=white>"+ dmg + " (" + _health + ")</color><color=yellow> damage</color>");
-        if(_health <= 0) Die();
+        gameObject.GetComponentInChildren<SpriteRenderer>().color = Color.red;       
+        if (_health <= 0) Die();
+        StartCoroutine(turnColorWhite(0.5f));
+    }
+
+    IEnumerator turnColorWhite(float time)
+    {
+        yield return new WaitForSeconds(time);
+        gameObject.GetComponentInChildren<SpriteRenderer>().color = Color.white;
     }
 
     #endregion
