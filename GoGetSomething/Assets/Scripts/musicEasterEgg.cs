@@ -20,7 +20,6 @@ public class musicEasterEgg : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F10))
         {
-            audio.Stop();
             if (_original)
             {
                 audio.clip = party;

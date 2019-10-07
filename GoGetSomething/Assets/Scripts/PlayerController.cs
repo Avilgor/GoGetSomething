@@ -33,7 +33,7 @@ public class PlayerController : Singleton<PlayerController>
         WalkUp,
         WalkDown,
         Attack,
-        damaged,
+        damaged
     }
 
     [Title("Player variables")]
@@ -115,7 +115,7 @@ public class PlayerController : Singleton<PlayerController>
     public forwardPointer _aimDirection;
     private weapon _weaponEquiped;
     private int _essencePower;
-    private bool _automaticMove,_forceCheck;
+    private bool _automaticMove,_forceCheck,_isDeath;
     private Vector2 kick = new Vector2(0,0);
     public bool _attacking;
 
@@ -135,6 +135,7 @@ public class PlayerController : Singleton<PlayerController>
         _weaponEquiped = weapon.nude;
         _attacking = false;
         _forceCheck = false;
+        _isDeath = false;
         CurrentHealth = _maxHealth;
         StartGame();
     }
@@ -301,8 +302,7 @@ public class PlayerController : Singleton<PlayerController>
                     }
 
                     break;
-                case PlayerState.Death:
-                    gameObject.SetActive(false);
+                case PlayerState.Death:                    
                     break;
                 case PlayerState.WalkUp:
                     _aimDirection = forwardPointer.back;
@@ -323,8 +323,8 @@ public class PlayerController : Singleton<PlayerController>
                             _anim.SetBool("withPorra", true);
                             break;
                     }
-
                     break;
+
                 case PlayerState.WalkDown:
                     _aimDirection = forwardPointer.front;
                     switch (_weaponEquiped)
@@ -501,7 +501,7 @@ public class PlayerController : Singleton<PlayerController>
         }
         else
         {
-            if (!_attacking)
+            if (!_attacking && !_isDeath)
             {               
                 if (Input.GetKey(KeyCode.W))
                 {
@@ -550,9 +550,10 @@ public class PlayerController : Singleton<PlayerController>
     public void Die()
     {
         Debug.Log("Player Died");
-        _DieParticles.GetComponent<ParticleSystem>().Play();
-        User.ClearZonesQueued();
-        EventManager.OnResetAll();
+        Instantiate(_DieParticles, transform.position, Quaternion.identity);
+        _spriteRender.SetActive(false);
+        _isDeath = true;
+        StartCoroutine(waitDeath(1f));
     }
 
     private void StartGame()
@@ -564,6 +565,15 @@ public class PlayerController : Singleton<PlayerController>
     {
         yield return new WaitForSeconds(time);
         _spriteRender.GetComponent<SpriteRenderer>().color = Color.white;
+    }
+
+    IEnumerator waitDeath(float time)
+    {
+        yield return new WaitForSeconds(time);
+        User.ClearZonesQueued();
+        EventManager.OnResetAll();
+        _spriteRender.SetActive(true);
+        _isDeath = false;
     }
 
     private void EnemyDied()
