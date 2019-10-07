@@ -30,6 +30,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] public AudioClip _deathSound,_attackSound;
     [SerializeField] private int _attackDmg;
     [SerializeField] private int _health;
+    [SerializeField] private AudioSource _as;
 
     public int AttackDamage => _attackDmg;
 
@@ -37,6 +38,8 @@ public class Enemy : MonoBehaviour
     private bool _stop;
     private GameObject _target;
     private LookPoint directionPointer;
+
+    private bool _death;
 
     [HideInInspector] public CombatZone ParentCombatZone;
 
@@ -52,6 +55,8 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
+        if (_death) return;
+
         FindUpdate();
         directionPointer = CalculateAngleDirection();
         switch (directionPointer)
@@ -72,12 +77,12 @@ public class Enemy : MonoBehaviour
     }
     private void OnEnable()
     {
-        EventManager.KillAllEnemies += Die;
+        EventManager.KillAllEnemies += InstaDeath;
     }
 
     private void OnDisable()
     {
-        EventManager.KillAllEnemies -= Die;
+        EventManager.KillAllEnemies -= InstaDeath;
     }
 
     #endregion
@@ -125,7 +130,21 @@ public class Enemy : MonoBehaviour
 
         EventManager.OnEnemyDied();
 
+        _as.pitch = Random.Range(0.8f, 1.2f);
+        _as.PlayOneShot(_deathSound);
+
+        Instantiate(_deathDrop, transform.position, Quaternion.identity);
         Instantiate(_deathParticles, transform.position, Quaternion.identity);
+
+        _death = true;
+
+        transform.GetChild(0).gameObject.SetActive(false);
+        Destroy(gameObject, 2);
+    }
+
+    private void InstaDeath()
+    {
+        if(ParentCombatZone != null) ParentCombatZone.EnemyKilled(this);
         Destroy(gameObject);
     }
 
@@ -134,14 +153,12 @@ public class Enemy : MonoBehaviour
         if (col.gameObject.CompareTag("PlayerWeap"))
         {
             Hit((int)PlayerController.I.Damage);
-            GetComponent<AudioSource>().PlayOneShot(_deathSound);
-            Instantiate(_deathDrop, transform.position, Quaternion.identity);
-            Instantiate(_deathParticles, transform.position, Quaternion.identity);
         }
     }
 
     private void Hit(int dmg)
     {
+        if (_death) return;
         _health -= dmg;
         Debug.Log("<color=yellow>Hit for </color><color=white>"+ dmg + " (" + _health + ")</color><color=yellow> damage</color>");
         if(_health <= 0) Die();

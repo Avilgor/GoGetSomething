@@ -39,12 +39,17 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField] private int _initDamage = 10;
     [SerializeField] private float _clubDamageMultiplier = 2;
     [SerializeField] private float _porraDamageMultiplier = 3.5f;
-    [SerializeField] private int _enemiesKilled;
-    [SerializeField] private int _extraDamagePerEnemyKilled = 3;
+    [SerializeField] private int _essences;
+    [SerializeField] private int _extraDamagePerEssence = 3;
+    [SerializeField] private float _extraSpeedPerEssence = 0.1f;
+    [SerializeField] private float _clubSpeedMultiplier = 0.8f;
+    [SerializeField] private float _porraSpeedMultiplier = 0.5f;
+
 
     private int _currentHealth;
 
-    public float Damage => (_initDamage + (_enemiesKilled * _extraDamagePerEnemyKilled)) * WeaponMultiplier;
+    public float Damage => (_initDamage + (_essences * _extraDamagePerEssence)) * WeaponMultiplier;
+    public float Velocity => (_velocity + (_essences * _extraSpeedPerEssence)) * SpeedWeaponMultiplier * Time.deltaTime;
 
     public float WeaponMultiplier
     {
@@ -52,6 +57,17 @@ public class PlayerController : Singleton<PlayerController>
         {
             if (_weaponEquiped == weapon.bone) return _clubDamageMultiplier;
             if (_weaponEquiped == weapon.porra) return _porraDamageMultiplier;
+
+            return 1;
+        }
+    }
+
+    public float SpeedWeaponMultiplier
+    {
+        get
+        {
+            if (_weaponEquiped == weapon.bone) return _clubSpeedMultiplier;
+            if (_weaponEquiped == weapon.porra) return _porraSpeedMultiplier;
 
             return 1;
         }
@@ -75,7 +91,7 @@ public class PlayerController : Singleton<PlayerController>
     private Vector2 kick = new Vector2(0,0);
     public bool _attacking,_gotDamaged;
 
-    public float Velocity => _velocity * Time.deltaTime;
+//    public float Velocity => _velocity * Time.deltaTime;
 
     #endregion
 
@@ -102,8 +118,8 @@ public class PlayerController : Singleton<PlayerController>
         DebugControls();
         CheckStates();
 
-        if(_collider!=null) Debug.Log("Collider: "+_collider);
-        else Debug.Log("Collider: null");
+//        if(_collider!=null) Debug.Log("Collider: "+_collider);
+//        else Debug.Log("Collider: null");
     }
 
     private void DebugControls()
@@ -201,6 +217,8 @@ public class PlayerController : Singleton<PlayerController>
         {
             _essencePower++;
             Debug.Log("Essence collected");
+            EventManager.OnEssenceCollect();
+            _essences++;
             Destroy(col.gameObject);
         }
     }
@@ -513,7 +531,7 @@ public class PlayerController : Singleton<PlayerController>
 
     private void EnemyDied()
     {
-        _enemiesKilled++;
+        _essences++;
     }
 
     #endregion
