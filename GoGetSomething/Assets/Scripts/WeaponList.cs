@@ -20,7 +20,21 @@ public class WeaponList : Singleton<WeaponList>
     #endregion
 
     #region MonoBehaviour Functions
+    private void OnEnable()
+    {
+        EventManager.ResetAll += DestroyThis;
+    }
 
+    private void OnDisable()
+    {
+        EventManager.ResetAll -= DestroyThis;
+    }
+
+    private void DestroyThis()
+    {
+        I = null;
+        Destroy(gameObject);
+    }
     #endregion
 
     #region Other Functions

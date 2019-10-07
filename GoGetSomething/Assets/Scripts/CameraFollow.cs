@@ -20,6 +20,8 @@ public class CameraFollow : MonoBehaviour
 
     private void Start()
     {
+        _target = PlayerController.I.transform;
+
         transform.position = _target.position + Vector3.forward * _distance;
     }
 

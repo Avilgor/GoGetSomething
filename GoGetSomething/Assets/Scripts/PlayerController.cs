@@ -1,16 +1,15 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
 using Sirenix.OdinInspector;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PlayerController : Singleton<PlayerController>
 {
     #region Fields
+
     public enum forwardPointer
     {
-        back=0,
+        back = 0,
         front,
         left,
         right
@@ -22,6 +21,7 @@ public class PlayerController : Singleton<PlayerController>
         bone,
         porra
     }
+
     enum PlayerState
     {
         Idle = 0,
@@ -36,22 +36,43 @@ public class PlayerController : Singleton<PlayerController>
 
     [Title("Player variables")]
     [SerializeField] private int _health = 100;
+    [SerializeField] private int _initDamage = 10;
+    [SerializeField] private float _clubDamageMultiplier = 2;
+    [SerializeField] private float _porraDamageMultiplier = 3.5f;
+    [SerializeField] private int _enemiesKilled;
+    [SerializeField] private int _extraDamagePerEnemyKilled = 3;
 
-    [Title("Setup")]
-    [SerializeField] private float _velocity = 0.08f;
+    private int _currentHealth;
 
-    [Title("References")]
-    [SerializeField] private Rigidbody2D _rb;
+    public float Damage => (_initDamage + (_enemiesKilled * _extraDamagePerEnemyKilled)) * WeaponMultiplier;
+
+    public float WeaponMultiplier
+    {
+        get
+        {
+            if (_weaponEquiped == weapon.bone) return _clubDamageMultiplier;
+            if (_weaponEquiped == weapon.porra) return _porraDamageMultiplier;
+
+            return 1;
+        }
+    }
+
+
+    [Title("Setup")] [SerializeField] private float _velocity = 0.08f;
+
+    [Title("References")] [SerializeField] private Rigidbody2D _rb;
     [SerializeField] private BoxCollider2D _collider;
     [SerializeField] private Zone _currentZone;
     [SerializeField] private Animator _anim;
     [SerializeField] private GameObject _DieParticles;
+    [SerializeField] public AudioClip[] _soundEffects;
 
     private PlayerState _currentState, _newState;
     public forwardPointer _aimDirection;
     private weapon _weaponEquiped;
-    private Vector2 kick = new Vector2(0,0);
+    private int _essencePower;
     private bool _automaticMove,_forceCheck;
+    private Vector2 kick = new Vector2(0,0);
     public bool _attacking,_gotDamaged;
 
     public float Velocity => _velocity * Time.deltaTime;
@@ -62,6 +83,8 @@ public class PlayerController : Singleton<PlayerController>
 
     void Start()
     {
+        I = this;
+
 //        _currentZone.EnterInitZone();
         _aimDirection = forwardPointer.front;
         _currentState = PlayerState.Idle;
@@ -69,6 +92,7 @@ public class PlayerController : Singleton<PlayerController>
         _attacking = false;
         _forceCheck = false;
         _gotDamaged = false;
+        _currentHealth = _health;
         StartGame();
     }
 
@@ -77,6 +101,9 @@ public class PlayerController : Singleton<PlayerController>
     {
         DebugControls();
         CheckStates();
+
+        if(_collider!=null) Debug.Log("Collider: "+_collider);
+        else Debug.Log("Collider: null");
     }
 
     private void DebugControls()
@@ -85,12 +112,12 @@ public class PlayerController : Singleton<PlayerController>
         if (Input.GetKeyDown(KeyCode.R))
         {
             Die();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
         else if (Input.GetKeyDown(KeyCode.F)) User.Firedust++;
         else if (Input.GetKeyDown(KeyCode.G)) User.Firedust--;
 #endif
     }
+
     private void FixedUpdate()
     {
         MovementUpdate();
@@ -107,6 +134,8 @@ public class PlayerController : Singleton<PlayerController>
         EventManager.ZoneReady += ZoneReady;
         EventManager.PopupOpened += PopupOpened;
         EventManager.PopupsClosed += PopupsClosed;
+        EventManager.EnemyDied += EnemyDied;
+        EventManager.ResetAll += DestroyThis;
     }
 
     private void OnDisabled()
@@ -115,10 +144,17 @@ public class PlayerController : Singleton<PlayerController>
         EventManager.ZoneReady -= ZoneReady;
         EventManager.PopupOpened -= PopupOpened;
         EventManager.PopupsClosed -= PopupsClosed;
+        EventManager.EnemyDied -= EnemyDied;
+        EventManager.ResetAll -= DestroyThis;
+    }
+
+    private void DestroyThis()
+    {
+//        Destroy(I.gameObject);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
-    {        
+    {
         if (collision.gameObject.CompareTag("Bone"))
         {
             _weaponEquiped = weapon.bone;
@@ -136,8 +172,8 @@ public class PlayerController : Singleton<PlayerController>
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        Debug.Log(col.gameObject.name + " : " + gameObject.name + " : " + Time.time);
-        Debug.Log("Tag: "+col.gameObject.tag);
+//        Debug.Log(col.gameObject.name + " : " + gameObject.name + " : " + Time.time);
+//        Debug.Log("Tag: " + col.gameObject.tag);
 
         if (col.CompareTag("SwitchZone"))
         {
@@ -150,15 +186,22 @@ public class PlayerController : Singleton<PlayerController>
         }
         else if (col.CompareTag("Damagable"))
         {
-            col.GetComponent<IDamagable>().Damage(10);
+//            Debug.Log("<color=yellow>Hit for <color=white>"+(int)Damage+"</color><color=yellow> damage</color>");
+//            col.GetComponent<IDamagable>().Hit((int)Damage);
         }
 
         if (col.gameObject.CompareTag("Enemy"))
         {
+            Hit(col.gameObject.GetComponentInParent<Enemy>().AttackDamage);
             _newState = PlayerState.damaged;
- //           kick = transform.position - col.gameObject.transform.position;
- //           kick.Normalize();
-            
+            //           kick = transform.position - col.gameObject.transform.position;
+            //           kick.Normalize();
+        }
+        if (col.gameObject.CompareTag("DeathEssence"))
+        {
+            _essencePower++;
+            Debug.Log("Essence collected");
+            Destroy(col.gameObject);
         }
     }
 
@@ -188,7 +231,7 @@ public class PlayerController : Singleton<PlayerController>
     private void CheckStates()
     {
         if (_currentState != _newState || _forceCheck)
-        {            
+        {
             switch (_newState)
             {
                 case PlayerState.Idle:
@@ -210,7 +253,7 @@ public class PlayerController : Singleton<PlayerController>
                             _anim.SetBool("withPorra", true);
                             break;
                     }
-                    
+
                     break;
                 case PlayerState.Death:
                     gameObject.SetActive(false);
@@ -234,7 +277,7 @@ public class PlayerController : Singleton<PlayerController>
                             _anim.SetBool("withPorra", true);
                             break;
                     }
-                    
+
                     break;
                 case PlayerState.WalkDown:
                     _aimDirection = forwardPointer.front;
@@ -254,7 +297,7 @@ public class PlayerController : Singleton<PlayerController>
                             _anim.SetBool("walk", true);
                             _anim.SetBool("withPorra", true);
                             break;
-                    }               
+                    }
                     break;
                 case PlayerState.WalkLeft:
                     _aimDirection = forwardPointer.left;
@@ -287,7 +330,7 @@ public class PlayerController : Singleton<PlayerController>
                         case weapon.bone:
                             _anim.SetBool("walk", true);
                             _anim.SetBool("withPorra", false);
-                            _anim.SetBool("withBone", true);                          
+                            _anim.SetBool("withBone", true);
                             break;
                         case weapon.porra:
                             _anim.SetBool("withBone", false);
@@ -336,11 +379,8 @@ public class PlayerController : Singleton<PlayerController>
                                         _rb.AddForce(-kick*500);
                                         _DieParticles
                     */
-                    _DieParticles.GetComponent<ParticleSystem>().Play();
-                    Instantiate(_DieParticles, transform.position, Quaternion.identity);
-                    gameObject.SetActive(false);
+                    GetComponent<AudioSource>().PlayOneShot(_soundEffects[0]);
                     break;
-
             }
 
             switch (_aimDirection)
@@ -389,7 +429,11 @@ public class PlayerController : Singleton<PlayerController>
         else
         {
             _automaticMove = false;
-            _collider.enabled = true;
+
+            if (_collider != null) Debug.Log("Collider: " + _collider);
+            else Debug.Log("Collider: null");
+
+            PlayerController.I.GetComponent<BoxCollider2D>().enabled = true;
         }
     }
 
@@ -432,7 +476,7 @@ public class PlayerController : Singleton<PlayerController>
                     _newState = PlayerState.WalkRight;
                     transform.position += new Vector3(Velocity, 0, 0);
                 }
-            }           
+            }
             if (Input.GetKey(KeyCode.Space))
             {
                 _newState = PlayerState.Attack;
@@ -441,10 +485,19 @@ public class PlayerController : Singleton<PlayerController>
         }
     }
 
+    private void Hit(int damage)
+    {
+        _health -= damage;
+        Debug.Log("<color=red>Hit for </color><color=white>" + damage + " ("+_health+")</color><color=red> damage</color>");
+
+        if(_health <= 0) Die();
+    }
+
     public void Die()
     {
         Debug.Log("Player Died");
         User.ClearZonesQueued();
+        EventManager.OnResetAll();
     }
 
     private void StartGame()
@@ -457,5 +510,11 @@ public class PlayerController : Singleton<PlayerController>
         yield return new WaitForSeconds(time);
         _gotDamaged = false;
     }
+
+    private void EnemyDied()
+    {
+        _enemiesKilled++;
+    }
+
     #endregion
 }
