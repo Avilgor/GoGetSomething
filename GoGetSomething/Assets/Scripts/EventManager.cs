@@ -15,6 +15,7 @@ public class EventManager : MonoBehaviour
     public delegate void BoolDelegate(bool value);
     public delegate void StringDelegate(string value);
 
+    public delegate void DoubleIntDelegate(int value, int value2);
     public delegate void ZoneDelegate(Zone zone);
     public delegate void BonfireDelegate(Bonfire bonfire);
 
@@ -33,18 +34,26 @@ public class EventManager : MonoBehaviour
     #endregion
 
     #region Zones
-    public static event VoidDelegate SaveProcess, CleanPlayer, ZoneReady;
-    public static event IntDelegate StartSurvivalTiming;
+    public static event VoidDelegate SaveProcess, CleanPlayer, ZoneReady, StartRoundZone, StartSkullZone, HideUIZone, EnemySpawn;
+    public static event IntDelegate StartSurvivalTiming, EnemiesLeftUpdate, SkullsUpdate;
     public static event ZoneDelegate ZoneEntered, ZoneCompleted, ZoneExit;
     public static event BonfireDelegate BonfireInteracted;
+    public static event DoubleIntDelegate RoundUpdate;
 
     public static void OnBonfireInteracted(Bonfire bonfire) { BonfireInteracted?.Invoke(bonfire); }
     public static void OnZoneReady() { ZoneReady?.Invoke(); }
     public static void OnCleanPlayer() { CleanPlayer?.Invoke(); }
+    public static void OnStartRoundZone() { StartRoundZone?.Invoke(); }
+    public static void OnStartSkullZone() { StartSkullZone?.Invoke(); }
     public static void OnSaveProcess() { SaveProcess?.Invoke(); }
+    public static void OnHideUIZone() { HideUIZone?.Invoke(); }
+    public static void OnEnemySpawn() { EnemySpawn?.Invoke(); }
 
     public static void OnZoneEntered(Zone zone) { ZoneEntered?.Invoke(zone); }
+    public static void OnRoundUpdate(int currentRound, int maxRounds) { RoundUpdate?.Invoke(currentRound, maxRounds); }
     public static void OnStartSurvivalTiming(int time) { StartSurvivalTiming?.Invoke(time); }
+    public static void OnEnemiesLeftUpdate(int time) { EnemiesLeftUpdate?.Invoke(time); }
+    public static void OnSkullsUpdate(int time) { SkullsUpdate?.Invoke(time); }
     public static void OnZoneCompleted(Zone zone) { ZoneCompleted?.Invoke(zone); }
     public static void OnZoneExit(Zone zone) { ZoneExit?.Invoke(zone); }
 

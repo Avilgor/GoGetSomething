@@ -104,6 +104,7 @@ public class Zone : MonoBehaviour
     public virtual void Completed()
     {
         EventManager.OnZoneCompleted(this);
+        EventManager.OnHideUIZone();
         User.SetZoneCompletedQueue(ID);
 
         OpenSwitches();

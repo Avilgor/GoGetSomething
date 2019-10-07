@@ -42,11 +42,15 @@ public class RoundsCombatZone : CombatZone
 
     private void StartRound()
     {
+        EventManager.OnStartRoundZone();
+
         var round = _rounds[_roundCount];
         for (int i = 0; i < round.Spawners.Length; i++)
         {
             round.Spawners[i].Spawner.StartSpawn(this);
         }
+
+        EventManager.OnRoundUpdate(_roundCount, _rounds.Length);
     }
 
     public override void EnemyKilled(Enemy enemy)

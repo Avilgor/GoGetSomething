@@ -36,10 +36,18 @@ public class DestroyCombatZone : CombatZone
         }
     }
 
+    protected override void ZoneReady()
+    {
+        base.ZoneReady();
+        EventManager.OnStartSkullZone();
+        EventManager.OnSkullsUpdate(_skulls.Count);
+    }
+
     public void SkullDestroyed(Skull skull)
     {
         _skulls.Remove(skull);
-        if(_skulls.Count <= 0) Completed();
+        EventManager.OnSkullsUpdate(_skulls.Count);
+        if (_skulls.Count <= 0) Completed();
     }
 
     public override void Completed()
