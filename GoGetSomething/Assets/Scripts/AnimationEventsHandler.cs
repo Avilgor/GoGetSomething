@@ -28,7 +28,8 @@ public class AnimationEventsHandler : MonoBehaviour
 
     public void onAttackFinish()
     {
-        PlayerController.I._attacking = false;
+        //PlayerController.I._attacking = false;
+        PlayerController.I._newState = PlayerController.PlayerState.Idle;
         for(int i=0;i<4;i++)
         {
             _punchAreas[(int)PlayerController.I._aimDirection].SetActive(false);

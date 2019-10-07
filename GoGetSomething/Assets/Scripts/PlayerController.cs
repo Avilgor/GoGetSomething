@@ -123,7 +123,7 @@ public class PlayerController : Singleton<PlayerController>
     [SerializeField] private GameObject _DieParticles,_spriteRender;
     [SerializeField] public AudioClip[] _soundEffects;
 
-    private PlayerState _currentState, _newState;
+    public PlayerState _currentState, _newState;
     public forwardPointer _aimDirection;
     private weapon _weaponEquiped;
     private int _essencePower;
@@ -444,8 +444,7 @@ public class PlayerController : Singleton<PlayerController>
                             }
                             _rb.AddForce(-kick*500);
                             _DieParticles
-        */
-                    GetComponent<AudioSource>().PlayOneShot(_soundEffects[0]);
+        */                    
                     break;
             }
 
@@ -521,7 +520,7 @@ public class PlayerController : Singleton<PlayerController>
         }
         else
         {
-            if (!_attacking && !_isDeath)
+            if (_newState!= PlayerState.Attack && !_isDeath && _currentState != PlayerState.Attack)
             {               
                 if (Input.GetKey(KeyCode.W))
                 {
@@ -543,10 +542,10 @@ public class PlayerController : Singleton<PlayerController>
                     NewState = PlayerState.WalkRight;
                     transform.position += new Vector3(Velocity, 0, 0);
                 }
-                if ((Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButton(0)) && _currentState!= PlayerState.Attack)
+                if (Input.GetKeyDown(KeyCode.Space) || Input.GetMouseButton(0))
                 {
                     NewState = PlayerState.Attack;
-                    _attacking = true;
+                    //_attacking = true;
 
                     Timing.RunCoroutine(_StopAttacking(), "StopAttacking");
                 }
@@ -581,6 +580,8 @@ public class PlayerController : Singleton<PlayerController>
         Instantiate(_DieParticles, transform.position, Quaternion.identity);
         _spriteRender.SetActive(false);
         _isDeath = true;
+        GetComponent<AudioSource>().PlayOneShot(_soundEffects[0]);
+        GetComponent<AudioSource>().PlayOneShot(_soundEffects[0]);
         StartCoroutine(waitDeath(1f));
     }
 
