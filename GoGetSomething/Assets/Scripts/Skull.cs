@@ -4,6 +4,7 @@
  */
 
 using System.Collections.Generic;
+using DG.Tweening;
 using MEC;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -44,6 +45,10 @@ public class Skull : MonoBehaviour, IDamagable
         _health -= dmg;
         Debug.Log("Health: "+_health);
         if (_health <= 0) Die();
+
+        var spr = GetComponent<SpriteRenderer>();
+        spr.DOColor(Color.red, 0.2f).SetEase(Ease.InOutSine).OnComplete(()=> spr.DOColor(Color.white, 0.2f).SetEase(Ease.InOutSine));
+        transform.DOShakePosition(0.3f, Vector3.one * 0.3f);
     }
 
     public void Die()
@@ -55,7 +60,7 @@ public class Skull : MonoBehaviour, IDamagable
 
     private IEnumerator<float> _Destroy()
     {
-        yield return Timing.WaitForSeconds(1);
+        yield return Timing.WaitForSeconds(0);
         Destroy(gameObject);
     }
     #endregion
