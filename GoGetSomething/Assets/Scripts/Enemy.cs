@@ -167,15 +167,15 @@ public class Enemy : MonoBehaviour
         _spawnDamage.SpawnText(dmg);
         _health -= dmg;
         Debug.Log("<color=yellow>Hit for </color><color=white>"+ dmg + " (" + _health + ")</color><color=yellow> damage</color>");
-        _spriteRenderer.GetComponent<SpriteRenderer>().color = Color.white;       
+        _spriteRenderer.GetComponent<SpriteRenderer>().color = Color.red;       
         if (_health <= 0) Die();
-        else StartCoroutine(turnColorWhite(0.2f));
+        StartCoroutine(turnColorWhite(0.2f));
     }
 
     IEnumerator turnColorWhite(float time)
     {
         yield return new WaitForSeconds(time);
-        _spriteRenderer.GetComponent<SpriteRenderer>().color = Color.red;
+        _spriteRenderer.GetComponent<SpriteRenderer>().color = Color.white;
     }
 
     #endregion
