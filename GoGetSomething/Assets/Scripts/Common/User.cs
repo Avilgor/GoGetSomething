@@ -46,9 +46,6 @@ public class User : MonoBehaviour
         var realId = "Bonfire"+bonfireId;
         var list = ObscuredPrefsX.GetStringArray("BonfireFired").ToList();
 
-        Debug.Log("Bonfire: " + bonfireId);
-        Debug.Log("list.Contains(realId): " + list.Contains(realId));
-
         return list.Contains(realId);
     }
 

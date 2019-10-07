@@ -44,6 +44,8 @@ public class Enemy : MonoBehaviour
 
     [HideInInspector] public CombatZone ParentCombatZone;
 
+    private SpawnDamageText _spawnDamage;
+
     #endregion
 
     #region MonoBehaviour Functions
@@ -52,6 +54,8 @@ public class Enemy : MonoBehaviour
         InitSetup();
         directionPointer = LookPoint.downRight;
         _attacking = false;
+
+        _spawnDamage = transform.GetChild(0).GetComponent<SpawnDamageText>();
     }
 
     private void Update()
@@ -139,7 +143,7 @@ public class Enemy : MonoBehaviour
 
         _death = true;
 
-        transform.GetChild(0).gameObject.SetActive(false);
+        transform.GetChild(1).gameObject.SetActive(false);
         Destroy(gameObject, 2);
     }
 
@@ -160,6 +164,7 @@ public class Enemy : MonoBehaviour
     private void Hit(int dmg)
     {
         if (_death) return;
+        _spawnDamage.SpawnText(dmg);
         _health -= dmg;
         Debug.Log("<color=yellow>Hit for </color><color=white>"+ dmg + " (" + _health + ")</color><color=yellow> damage</color>");
         gameObject.GetComponentInChildren<SpriteRenderer>().color = Color.white;       
