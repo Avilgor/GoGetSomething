@@ -8,7 +8,7 @@ public class PixelPerfect : MonoBehaviour
     public int refHight;
     public int PPU;
 
-    void Start() {
+    void Update() {
         int PPUScale = Math.Max(Screen.height / refHight, 1);
         var cinema = GetComponent<Camera>();
         if (cinema !=null)

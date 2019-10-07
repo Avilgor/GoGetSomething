@@ -42,7 +42,10 @@ public class Zone : MonoBehaviour
         if (ZoneType == ZoneType.Combat) CloseSwitches();
         ShowZone();
 
+        Debug.Log("?");
+
         Timing.RunCoroutine(_PrepareZone());
+        Debug.Log("2?");
     }
 
     public virtual void Exit()
@@ -93,8 +96,6 @@ public class Zone : MonoBehaviour
 
     protected virtual IEnumerator<float> _PrepareZone()
     {
-        Debug.Log("Zone getting ready");
-
         yield return Timing.WaitForSeconds(2);
 
         ZoneReady();

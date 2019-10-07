@@ -101,6 +101,9 @@ public class UIController : MonoBehaviour
 
     private void StartSurvivalTiming(int value)
     {
+        SetOffAll();
+
+        _topBarCg.DOFade(1, 0.35f).SetEase(Ease.InOutSine);
         _timingBar.gameObject.SetActive(true);
         _timingCg.DOFade(1, 0.5f);
 

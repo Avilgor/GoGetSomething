@@ -35,7 +35,7 @@ public class EventManager : MonoBehaviour
     #endregion
 
     #region Zones
-    public static event VoidDelegate SaveProcess, CleanPlayer, ZoneReady, StartRoundZone, StartSkullZone, HideUIZone, EnemySpawn, ResetAll;
+    public static event VoidDelegate SaveProcess, CleanPlayer, ZoneReady, StartRoundZone, StartSkullZone, HideUIZone, EnemySpawn, ResetAll, EssenceCollect;
     public static event IntDelegate StartSurvivalTiming, EnemiesLeftUpdate, SkullsUpdate;
     public static event ZoneDelegate ZoneEntered, ZoneCompleted, ZoneExit;
     public static event BonfireDelegate BonfireInteracted;
@@ -50,6 +50,7 @@ public class EventManager : MonoBehaviour
     public static void OnHideUIZone() { HideUIZone?.Invoke(); }
     public static void OnEnemySpawn() { EnemySpawn?.Invoke(); }
     public static void OnResetAll() { ResetAll?.Invoke(); }
+    public static void OnEssenceCollect() { EssenceCollect?.Invoke(); }
 
     public static void OnZoneEntered(Zone zone) { ZoneEntered?.Invoke(zone); }
     public static void OnRoundUpdate(int currentRound, int maxRounds) { RoundUpdate?.Invoke(currentRound, maxRounds); }
