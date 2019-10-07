@@ -530,6 +530,11 @@ public class PlayerController : Singleton<PlayerController>
                 }
             }            
         }
+
+        if (Input.GetKey(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
     }
 
     private void Hit(int damage)
