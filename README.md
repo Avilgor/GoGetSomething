@@ -6,7 +6,8 @@ A game about beating your own limits by going from the bottom to the top of your
 
 # Controls
 - W/A/S/D for movement
-- Space to atack
+- Space/LeftClick to atack
+- Escape to close game
 
 # Collaborators
 - https://github.com/Avilgor
