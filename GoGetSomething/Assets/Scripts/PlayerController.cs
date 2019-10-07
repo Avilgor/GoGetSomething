@@ -226,6 +226,8 @@ public class PlayerController : Singleton<PlayerController>
         }
     }
 
+    [SerializeField] private CanvasGroup _end;
+
     void OnTriggerEnter2D(Collider2D col)
     {
 //        Debug.Log(col.gameObject.name + " : " + gameObject.name + " : " + Time.time);
@@ -244,6 +246,12 @@ public class PlayerController : Singleton<PlayerController>
         {
 //            Debug.Log("<color=yellow>Hit for <color=white>"+(int)Damage+"</color><color=yellow> damage</color>");
 //            col.GetComponent<IDamagable>().Hit((int)Damage);
+        }
+        else if (col.CompareTag("End"))
+        {
+            _end.DOFade(1, 3).SetEase(Ease.InOutSine);
+            //            Debug.Log("<color=yellow>Hit for <color=white>"+(int)Damage+"</color><color=yellow> damage</color>");
+            //            col.GetComponent<IDamagable>().Hit((int)Damage);
         }
 
         if (col.gameObject.CompareTag("Enemy"))

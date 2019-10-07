@@ -12,6 +12,7 @@ TagManager:
   - Porra
   - PlayerWeap
   - DeathEssence
+  - End
   layers:
   - Default
   - TransparentFX
