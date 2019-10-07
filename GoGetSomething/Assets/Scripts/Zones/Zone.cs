@@ -35,6 +35,8 @@ public class Zone : MonoBehaviour
 
     public virtual void Enter()
     {
+        Debug.Log("enter");
+
         EventManager.OnCleanPlayer();
         EventManager.OnZoneEntered(this);
         if (ZoneType == ZoneType.Combat) CloseSwitches();
@@ -91,6 +93,8 @@ public class Zone : MonoBehaviour
 
     protected virtual IEnumerator<float> _PrepareZone()
     {
+        Debug.Log("Zone getting ready");
+
         yield return Timing.WaitForSeconds(2);
 
         ZoneReady();

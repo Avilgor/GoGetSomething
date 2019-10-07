@@ -43,6 +43,7 @@ public class RoundsCombatZone : CombatZone
     private void StartRound()
     {
         EventManager.OnStartRoundZone();
+        Debug.Log("Start Round");
 
         var round = _rounds[_roundCount];
         for (int i = 0; i < round.Spawners.Length; i++)

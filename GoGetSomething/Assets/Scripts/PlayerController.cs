@@ -102,8 +102,8 @@ public class PlayerController : Singleton<PlayerController>
         DebugControls();
         CheckStates();
 
-        if(_collider!=null) Debug.Log("Collider: "+_collider);
-        else Debug.Log("Collider: null");
+//        if(_collider!=null) Debug.Log("Collider: "+_collider);
+//        else Debug.Log("Collider: null");
     }
 
     private void DebugControls()

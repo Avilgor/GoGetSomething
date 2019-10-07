@@ -48,7 +48,7 @@ public class UIController : MonoBehaviour
     private void Start()
     {
         SetOffAll();
-        _timingBar.gameObject.SetActive(false);
+//        _timingBar.gameObject.SetActive(false);
         _timingCg.DOFade(0, 0);
     }
 
@@ -149,6 +149,7 @@ public class UIController : MonoBehaviour
 
     private void StartRoundZone()
     {
+//        _topBarCg.gameObject.SetActive(true);
         _topBarCg.DOFade(1, 0.35f).SetEase(Ease.InOutSine);
         _roundsCg.DOFade(1, 0.35f).SetDelay(0.5f).SetEase(Ease.InOutSine);
     }
