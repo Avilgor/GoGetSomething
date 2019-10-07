@@ -162,15 +162,15 @@ public class Enemy : MonoBehaviour
         if (_death) return;
         _health -= dmg;
         Debug.Log("<color=yellow>Hit for </color><color=white>"+ dmg + " (" + _health + ")</color><color=yellow> damage</color>");
-        gameObject.GetComponentInChildren<SpriteRenderer>().color = Color.red;       
+        gameObject.GetComponentInChildren<SpriteRenderer>().color = Color.white;       
         if (_health <= 0) Die();
-        StartCoroutine(turnColorWhite(0.5f));
+        else StartCoroutine(turnColorWhite(0.2f));
     }
 
     IEnumerator turnColorWhite(float time)
     {
         yield return new WaitForSeconds(time);
-        gameObject.GetComponentInChildren<SpriteRenderer>().color = Color.white;
+        gameObject.GetComponentInChildren<SpriteRenderer>().color = Color.red;
     }
 
     #endregion

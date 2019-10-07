@@ -508,8 +508,9 @@ public class PlayerController : Singleton<PlayerController>
         _health -= damage;
         Debug.Log("<color=red>Hit for </color><color=white>" + damage + " ("+_health+")</color><color=red> damage</color>");
         gameObject.GetComponentInChildren<SpriteRenderer>().color = Color.red;
+
         if (_health <= 0) Die();
-        StartCoroutine(turnColorWhite(0.5f));
+        else StartCoroutine(turnColorWhite(0.2f));
     }
 
     public void Die()
