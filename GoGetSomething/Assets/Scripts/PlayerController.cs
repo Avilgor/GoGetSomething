@@ -524,7 +524,7 @@ public class PlayerController : Singleton<PlayerController>
                     transform.position += new Vector3(Velocity, 0, 0);
                 }
             }
-            if (Input.GetKey(KeyCode.Space) && !_attacking)
+            if (Input.GetKey(KeyCode.Space) && Input.GetMouseButton(0) && !_attacking)
             {
                 _newState = PlayerState.Attack;
                 _attacking = true;
@@ -534,7 +534,6 @@ public class PlayerController : Singleton<PlayerController>
 
     private void Hit(int damage)
     {
-        Debug.Log("<color=red>Hit for </color><color=white>" + damage + " ("+_health+")</color><color=red> damage</color>");
         _spriteRender.GetComponent<SpriteRenderer>().color = Color.red;
         CurrentHealth -= damage;
         Debug.Log("<color=red>Hit for </color><color=white>" + damage + " ("+ CurrentHealth + ")</color><color=red> damage</color>");
