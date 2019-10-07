@@ -231,6 +231,7 @@ MonoBehaviour:
     type: 3}
   _deathDrop: {fileID: 5096070722829313400, guid: 97decb32a886eff46a6c495eef847fa3,
     type: 3}
+  _spriteRenderer: {fileID: 5094546156696567602}
   _deathSound: {fileID: 8300000, guid: 15bb831688e05de46a0c65ad63c73ddd, type: 3}
   _attackSound: {fileID: 8300000, guid: 39de43d6919965c4891ecd396baff9dd, type: 3}
   _attackDmg: 5

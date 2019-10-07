@@ -27,7 +27,7 @@ public class Enemy : MonoBehaviour
     #region Fields
     [SerializeField] private NavMeshAgent _agent;
     [SerializeField] private Animator _anim;
-    [SerializeField] private GameObject _deathParticles,_deathDrop;
+    [SerializeField] private GameObject _deathParticles,_deathDrop,_spriteRenderer;
     [SerializeField] public AudioClip _deathSound,_attackSound;
     [SerializeField] private int _attackDmg;
     [SerializeField] private int _health;
@@ -167,7 +167,7 @@ public class Enemy : MonoBehaviour
         _spawnDamage.SpawnText(dmg);
         _health -= dmg;
         Debug.Log("<color=yellow>Hit for </color><color=white>"+ dmg + " (" + _health + ")</color><color=yellow> damage</color>");
-        gameObject.GetComponentInChildren<SpriteRenderer>().color = Color.white;       
+        _spriteRenderer.GetComponent<SpriteRenderer>().color = Color.white;       
         if (_health <= 0) Die();
         else StartCoroutine(turnColorWhite(0.2f));
     }
@@ -175,7 +175,7 @@ public class Enemy : MonoBehaviour
     IEnumerator turnColorWhite(float time)
     {
         yield return new WaitForSeconds(time);
-        gameObject.GetComponentInChildren<SpriteRenderer>().color = Color.red;
+        _spriteRenderer.GetComponent<SpriteRenderer>().color = Color.red;
     }
 
     #endregion
