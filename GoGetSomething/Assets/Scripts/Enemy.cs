@@ -169,7 +169,7 @@ public class Enemy : MonoBehaviour
         Debug.Log("<color=yellow>Hit for </color><color=white>"+ dmg + " (" + _health + ")</color><color=yellow> damage</color>");
         _spriteRenderer.GetComponent<SpriteRenderer>().color = Color.red;       
         if (_health <= 0) Die();
-        StartCoroutine(turnColorWhite(0.2f));
+        else StartCoroutine(turnColorWhite(0.2f));
     }
 
     IEnumerator turnColorWhite(float time)
