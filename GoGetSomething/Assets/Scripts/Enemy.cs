@@ -27,7 +27,7 @@ public class Enemy : MonoBehaviour
     #region Fields
     [SerializeField] private NavMeshAgent _agent;
     [SerializeField] private Animator _anim;
-    [SerializeField] private GameObject _deathParticles;
+    [SerializeField] private GameObject _deathParticles,_deathDrop;
     [SerializeField] private int _AttackDmg;
 
     public bool _attacking;
@@ -127,6 +127,7 @@ public class Enemy : MonoBehaviour
         if (col.gameObject.CompareTag("PlayerWeap"))
         {
             Instantiate(_deathParticles, transform.position, Quaternion.identity);
+            Instantiate(_deathDrop, transform.position, Quaternion.identity); 
             Destroy(gameObject);
         }
     }

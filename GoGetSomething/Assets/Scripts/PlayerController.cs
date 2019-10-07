@@ -52,6 +52,7 @@ public class PlayerController : Singleton<PlayerController>
     private weapon _weaponEquiped;
     private Vector2 kick = new Vector2(0,0);
     private bool _automaticMove,_forceCheck;
+    private int _essencePower;
     public bool _attacking,_gotDamaged;
 
     public float Velocity => _velocity * Time.deltaTime;
@@ -69,6 +70,7 @@ public class PlayerController : Singleton<PlayerController>
         _attacking = false;
         _forceCheck = false;
         _gotDamaged = false;
+        _essencePower = 0;
         StartGame();
     }
 
@@ -159,6 +161,11 @@ public class PlayerController : Singleton<PlayerController>
  //           kick = transform.position - col.gameObject.transform.position;
  //           kick.Normalize();
             
+        }
+        if (col.gameObject.CompareTag("DeathEssence"))
+        {
+            _essencePower++;
+            Destroy(col.gameObject);
         }
     }
 
