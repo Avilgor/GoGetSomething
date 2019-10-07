@@ -5,5 +5,5 @@
 
 public interface IDamagable
 {
-    void Damage(int dmg);
+    void Hit(int dmg);
 }

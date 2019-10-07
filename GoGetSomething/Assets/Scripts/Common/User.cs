@@ -12,7 +12,7 @@ public class User : MonoBehaviour
 {
     public static int Firedust
     {
-        get { return ObscuredPrefs.GetInt("Firedust"); }
+        get { return ObscuredPrefs.GetInt("Firedust", 3); }
         set
         {
             if (value < 0) value = 0;

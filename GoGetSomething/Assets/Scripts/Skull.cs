@@ -19,6 +19,14 @@ public class Skull : MonoBehaviour, IDamagable
 
     #region MonoBehaviour Functions
 
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.CompareTag("PlayerWeap"))
+        {
+            Hit((int)PlayerController.I.Damage);
+        }
+    }
+
     #endregion
 
     #region Other Functions
@@ -28,9 +36,11 @@ public class Skull : MonoBehaviour, IDamagable
         _destroyCombatZone = zone;
     }
 
-    public void Damage(int dmg)
+    public void Hit(int dmg)
     {
         if (_health < 0) return;
+        Debug.Log("<color=yellow>Hit<color=white>" + gameObject.name + "</color> for <color=white>"+ dmg + "</color><color=yellow> damage</color>");
+
         _health -= dmg;
         Debug.Log("Health: "+_health);
         if (_health <= 0) Die();

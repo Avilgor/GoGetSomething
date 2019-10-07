@@ -5,6 +5,7 @@
  */
 
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class ClassTest : MonoBehaviour
 {
@@ -34,6 +35,7 @@ public class ClassTest : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             Debug.Log("changed");
+            SceneManager.LoadScene("ZonesTest", LoadSceneMode.Single);
         }
     }
 

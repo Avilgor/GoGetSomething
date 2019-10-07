@@ -17,8 +17,7 @@ enum LookPoint
 public enum EnemyType
 {
     Null = -1,
-    Nightmare1 = 100, Nightmare2, Nightmare3,
-    Other = 200
+    Nightmare1 = 100, Nightmare2, Nightmare3, Nightmare4,
     //etc.
 }
 
@@ -28,8 +27,11 @@ public class Enemy : MonoBehaviour
     [SerializeField] private NavMeshAgent _agent;
     [SerializeField] private Animator _anim;
     [SerializeField] private GameObject _deathParticles,_deathDrop;
-    [SerializeField] private int _AttackDmg;
     [SerializeField] public AudioClip _deathSound,_attackSound;
+    [SerializeField] private int _attackDmg;
+    [SerializeField] private int _health;
+
+    public int AttackDamage => _attackDmg;
 
     public bool _attacking;
     private bool _stop;
@@ -94,7 +96,6 @@ public class Enemy : MonoBehaviour
     {
         if ((transform.position - _target.transform.position).magnitude < 1 && !_stop)
         {
-            Debug.Log("Enemy Attack");
             _anim.SetBool("attack", true);
             _attacking = true;
         }
@@ -121,17 +122,29 @@ public class Enemy : MonoBehaviour
     private void Die()
     {
         if(ParentCombatZone != null) ParentCombatZone.EnemyKilled(this);
+
+        EventManager.OnEnemyDied();
+
+        Instantiate(_deathParticles, transform.position, Quaternion.identity);
+        Destroy(gameObject);
     }
 
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.gameObject.CompareTag("PlayerWeap"))
         {
-            Instantiate(_deathParticles, transform.position, Quaternion.identity);
-            Instantiate(_deathDrop, transform.position, Quaternion.identity);
+            Hit((int)PlayerController.I.Damage);
             GetComponent<AudioSource>().PlayOneShot(_deathSound);
-            Destroy(gameObject);
+            Instantiate(_deathDrop, transform.position, Quaternion.identity);
+            Instantiate(_deathParticles, transform.position, Quaternion.identity);
         }
+    }
+
+    private void Hit(int dmg)
+    {
+        _health -= dmg;
+        Debug.Log("<color=yellow>Hit for </color><color=white>"+ dmg + " (" + _health + ")</color><color=yellow> damage</color>");
+        if(_health <= 0) Die();
     }
 
     #endregion
